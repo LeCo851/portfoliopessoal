@@ -1,12 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { PortfolioService } from './portfolio';
 import { ProjectCard } from './project.interface';
+import { ChatFloatingComponent } from './components/chat-floating/chat-floating'
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule],
+  imports: [ChatFloatingComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

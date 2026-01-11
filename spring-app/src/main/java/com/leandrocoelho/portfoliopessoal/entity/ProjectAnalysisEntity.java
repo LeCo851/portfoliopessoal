@@ -33,6 +33,10 @@ public class ProjectAnalysisEntity {
     private Instant lastUpdate;
 
     public boolean isUpToDate(java.time.Instant githubUpdateDate){
-        return this.lastUpdate != null && this.lastUpdate.equals(githubUpdateDate);
+        if (this.lastUpdate == null || githubUpdateDate == null){
+            return false;
+        }
+
+        return this.lastUpdate.getEpochSecond() == githubUpdateDate.getEpochSecond();
     }
 }

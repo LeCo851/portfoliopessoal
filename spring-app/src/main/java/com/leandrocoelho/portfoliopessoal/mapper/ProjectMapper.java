@@ -7,6 +7,7 @@ import com.leandrocoelho.portfoliopessoal.model.portfolio.ProjectCard;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -37,6 +38,18 @@ public class ProjectMapper {
                 "https://github.com/LeCo851/" + repo.name() + "/raw/main/cover.png",
                 repo.html_url(),
                 repo.updated_at()
+        );
+    }
+
+    public ProjectAnalysisEntity toBasicEntity(GitHubRepositoryDTO repositoryDTO){
+        return new ProjectAnalysisEntity(
+                repositoryDTO.name(),
+                repositoryDTO.name(),
+                repositoryDTO.description() != null ? repositoryDTO.description() : "Análise detalhada indisponível no momento",
+                repositoryDTO.topics() != null ? repositoryDTO.topics() : Collections.emptyList(),
+                "https://github.com/LeCo851/" + repositoryDTO.name() + "/raw/main/cover.png",
+                repositoryDTO.html_url(),
+                repositoryDTO.updated_at()
         );
     }
 }
