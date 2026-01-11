@@ -1,0 +1,247 @@
+// --- Variáveis do Tema ---
+$bg-dark: #0b1120;       // Preto Profundo
+$card-bg: #1e293b;       // Cinza Azulado
+$text-main: #94a3b8;     // Cinza Claro
+$text-white: #f1f5f9;
+$accent-copper: #f59e0b; // Laranja/Cobre (Engenharia/Java)
+$accent-cyan: #06b6d4;   // Ciano (Dados/Docker)
+$accent-glass: rgba(30, 41, 59, 0.7);
+
+// --- Fundo Dinâmico (Efeito Papel Milimetrado/Química) ---
+.background-grid {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  z-index: -1;
+  background-color: $bg-dark;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px; // Tamanho da grade
+  mask-image: radial-gradient(circle at center, black 40%, transparent 100%); // Vignette
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+// --- Header Industrial ---
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4rem;
+  border-bottom: 1px solid rgba($accent-copper, 0.3);
+  padding-bottom: 1rem;
+
+  .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .symbol {
+      font-size: 2.5rem;
+      color: $accent-copper;
+      animation: spin 10s linear infinite;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 2rem;
+      letter-spacing: -1px;
+      color: $text-white;
+    }
+
+    small {
+      color: $accent-cyan;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+  }
+
+  .status-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: #10b981;
+    border: 1px solid rgba(#10b981, 0.3);
+    padding: 5px 10px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .dot {
+      width: 8px; height: 8px;
+      background: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #10b981;
+      animation: pulse 2s infinite;
+    }
+  }
+}
+
+// --- Grid de Projetos ---
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2.5rem;
+}
+
+// --- O Card (Engenharia + Tech) ---
+.card {
+  background: $accent-glass;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  position: relative;
+
+  // Borda inferior "química" (Cobre)
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; width: 100%; height: 3px;
+    background: linear-gradient(90deg, $accent-copper, $accent-cyan);
+    opacity: 0.5;
+    transition: opacity 0.3s;
+  }
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    border-color: rgba($accent-cyan, 0.3);
+
+    &::after { opacity: 1; }
+    .image-wrapper .img { transform: scale(1.05); }
+  }
+
+  .image-wrapper {
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+
+    .img {
+      width: 100%; height: 100%;
+      background-size: cover;
+      background-position: center;
+      transition: transform 0.5s ease;
+    }
+
+    // Efeito de "Scanline" sobre a imagem
+    .tech-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: repeating-linear-gradient(
+          transparent,
+          transparent 2px,
+          rgba(0, 0, 0, 0.3) 3px
+      );
+      pointer-events: none;
+    }
+  }
+
+  .content {
+    padding: 1.5rem;
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+
+      h2 {
+        font-size: 1.4rem;
+        margin: 0;
+        color: $text-white;
+        line-height: 1.2;
+      }
+
+      .git-icon {
+        color: $accent-cyan;
+        text-decoration: none;
+        font-family: 'JetBrains Mono', monospace;
+        font-weight: bold;
+        opacity: 0.7;
+        transition: opacity 0.2s;
+        &:hover { opacity: 1; text-shadow: 0 0 10px $accent-cyan; }
+      }
+    }
+
+    .description {
+      color: $text-main;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 3; // Limita a 3 linhas
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .specs {
+      .label {
+        display: block;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.7rem;
+        color: rgba($text-main, 0.5);
+        margin-bottom: 8px;
+      }
+
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+
+        .tag {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 0.75rem;
+          padding: 4px 10px;
+          border-radius: 4px;
+          background: rgba(255,255,255,0.05);
+          color: $text-main;
+          border: 1px solid transparent;
+
+          // Tags "Backend" (Java/Spring) ganham destaque Cobre
+          &.backend {
+            color: $accent-copper;
+            border-color: rgba($accent-copper, 0.2);
+            background: rgba($accent-copper, 0.05);
+          }
+
+          // Tags "Data" ganham destaque Ciano
+          &.data {
+            color: $accent-cyan;
+            border-color: rgba($accent-cyan, 0.2);
+            background: rgba($accent-cyan, 0.05);
+          }
+        }
+      }
+    }
+  }
+}
+
+// --- Animações ---
+@keyframes spin { 100% { transform: rotate(360deg); } }
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(#10b981, 0.7); }
+  70% { box-shadow: 0 0 0 5px rgba(#10b981, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(#10b981, 0); }
+}
+
+.cursor { animation: blink 1s step-end infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+// Responsivo
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+
+    .status-badge { align-self: flex-end; }
+  }
+}

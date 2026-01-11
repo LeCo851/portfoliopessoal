@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: portfolio-backend
+
+  threads:
+    virtual:
+      enabled: true
+
+  # Configuração da IA (Groq)
+  ai:
+    openai:
+      api-key: ${GROQ_API_KEY} # Você define isso nas variáveis de ambiente do Windows/Linux
+      base-url: https://api.groq.com/openai # URL mágica que faz o Spring falar com a Groq
+      chat:
+        options:
+          model: llama-3.3-70b-versatile # Ou 'mixtral-8x7b-32768'
+          temperature: 0.1
+
+  # Cache (Essencial para não gastar API do GitHub/Groq a cada F5)
+  cache:
+    cache-names:
+      - github-repos
+    caffeine:
+      spec: maximumSize=100,expireAfterWrite=1h
+
+  github:
+    token: ${GITHUB_TOKEN}
+
+  datasource:
+
+    url: jdbc:postgresql://db.vorzuewlvjsveyeoorvu.supabase.co:5432/postgres
+    username: postgres
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+    jpa:
+      database: POSTGRESQL
+      database-platform: org.hibernate.dialect.PostgreSQLDialect
+      hibernate:
+        ddl-auto: update
+      show-sql: true

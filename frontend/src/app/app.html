@@ -1,0 +1,54 @@
+<div class="background-grid"></div> <div class="container">
+  <header class="dashboard-header">
+    <div class="logo-area">
+      <span class="symbol">⬢</span> <div class="text">
+      <h1>LECO.DEV<span class="cursor">_</span></h1>
+      <small>Engenharia • Dados • Backend</small>
+    </div>
+    </div>
+
+    <div class="status-badge">
+      <span class="dot"></span> System Online
+    </div>
+  </header>
+
+  <main class="grid">
+    @for (item of projects(); track item.id) {
+      <article class="card">
+        <div class="image-wrapper">
+          <div class="img" [style.backgroundImage]="'url(' + item.imageUrl + ')'"></div>
+          <div class="tech-overlay"></div>
+        </div>
+
+        <div class="content">
+          <div class="card-header">
+            <h2>{{ item.titulo }}</h2>
+            <a [href]="item.linkGithub" target="_blank" class="git-icon" title="Ver Código">
+              &lt;/&gt;
+            </a>
+          </div>
+
+          <p class="description">{{ item.resumo }}</p>
+
+          <div class="specs">
+            <span class="label">STACK_TRACE:</span>
+            <div class="tags">
+              @for (tag of item.tags; track tag) {
+                <span class="tag"
+                      [class.backend]="tag.includes('Java') || tag.includes('Spring')"
+                      [class.data]="tag.includes('Data') || tag.includes('Python') || tag.includes('Machine')">
+                  {{ tag }}
+                </span>
+              }
+            </div>
+          </div>
+        </div>
+      </article>
+    } @empty {
+      <div class="loading-terminal">
+        > Initializing Neural Link...<br>
+        > Fetching Repositories...<span class="cursor">█</span>
+      </div>
+    }
+  </main>
+</div>
