@@ -1,71 +1,50 @@
-<!-- Botão Flutuante (Sempre Visível) -->
-<button
-  type="button"
-  (click)="toggleChat()"
-  class="w-16 h-16 bg-blue-600 hover:bg-blue-500 text-white rounded-full shadow-2xl flex items-center justify-center transition-transform hover:scale-110 cursor-pointer relative">
-  
-  @if (!isOpen()) {
-    <!-- Ícone de Chat -->
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" />
-    </svg>
-  } @else {
-    <!-- Ícone de Fechar (X) -->
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-    </svg>
-  }
+<button mat-fab color="primary" class="chat-fab-button" (click)="toggleChat()">
+  <mat-icon>{{ isOpen() ? 'close' : 'chat' }}</mat-icon>
 </button>
 
-<!-- Janela do Chat -->
 @if (isOpen()) {
-<div class="absolute bottom-20 right-0 w-80 md:w-96 h-[500px] bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-fade-in-up origin-bottom-right">
-  
-  <!-- Header -->
-  <div class="bg-blue-600 p-4 text-white flex items-center gap-3">
-    <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">🤖</div>
-    <div>
-      <h3 class="font-bold text-lg">Leandro AI</h3>
-      <p class="text-xs text-blue-100 flex items-center gap-1"><span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span> Online</p>
-    </div>
-  </div>
+  <mat-card class="chat-card elevation-z8" [class.animate-entry]="isOpen()">
 
-  <!-- Área de Mensagens -->
-  <div class="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-900/50">
-    @for (msg of messages(); track $index) {
-    <div [class.justify-end]="msg.isUser" class="flex">
-      <div [class]="msg.isUser ? 'bg-blue-600 text-white rounded-tr-none' : 'bg-slate-700 text-gray-200 rounded-tl-none'"
-           class="max-w-[80%] p-3 rounded-2xl text-sm shadow-md leading-relaxed whitespace-pre-wrap">
-        {{ msg.text }}
+    <mat-card-header class="chat-header">
+      <div mat-card-avatar class="header-avatar">
+        <mat-icon>smart_toy</mat-icon>
       </div>
-    </div>
-    }
+      <mat-card-title>Leandro AI</mat-card-title>
+      <mat-card-subtitle class="status-online">● Online (v21)</mat-card-subtitle>
+    </mat-card-header>
 
-    @if (isLoading()) {
-    <div class="flex justify-start">
-      <div class="bg-slate-700 p-3 rounded-2xl rounded-tl-none text-xs text-gray-400">Digitando...</div>
-    </div>
-    }
-  </div>
+    <mat-card-content class="chat-content">
 
-  <!-- Input -->
-  <div class="p-3 bg-slate-800 border-t border-slate-700 flex gap-2">
-    <input
-      [ngModel]="userQuestion()"
-      (ngModelChange)="userQuestion.set($event)"
-      (keyup.enter)="sendMessage()"
-      type="text"
-      placeholder="Pergunte algo sobre os projetos..."
-      class="flex-1 bg-slate-900 text-white rounded-xl px-4 py-2 text-sm border border-slate-700 focus:outline-none focus:border-blue-500 transition"
-    >
-    <button
-      (click)="sendMessage()"
-      [disabled]="isLoading() || !userQuestion().trim()"
-      class="bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-white p-2 rounded-xl transition">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
-        <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
-      </svg>
-    </button>
-  </div>
-</div>
+      @for (msg of messages(); track $index) {
+        <div class="message-row" [class.user-row]="msg.isUser">
+          <div class="message-bubble" [class.user-bubble]="msg.isUser" [class.bot-bubble]="!msg.isUser">
+            {{ msg.text }}
+          </div>
+        </div>
+      }
+
+      @if (isLoading()) {
+        <div class="loading-container">
+          <mat-spinner diameter="20"></mat-spinner>
+          <span>Processando...</span>
+        </div>
+      }
+    </mat-card-content>
+
+    <div class="chat-actions">
+      <mat-form-field appearance="outline" class="full-width no-bottom-padding">
+        <mat-label>Digite sua pergunta...</mat-label>
+        <input matInput
+               [ngModel]="userQuestion()"
+               (ngModelChange)="userQuestion.set($event)"
+               (keyup.enter)="sendMessage()"
+               [disabled]="isLoading()">
+
+        <button mat-icon-button matSuffix (click)="sendMessage()" [disabled]="!userQuestion() || isLoading()">
+          <mat-icon>send</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+
+  </mat-card>
 }

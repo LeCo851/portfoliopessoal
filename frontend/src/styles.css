@@ -1,20 +1,18 @@
-/* Importa o Tailwind v4 */
-@import "tailwindcss";
-
-/* Fontes (Movidas do styles.scss para centralização) */
+/* Fontes Externas */
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
 
-/* Configura o Tema (Cores personalizadas) direto no CSS */
+/* Configuração do Tema */
 @theme {
-  --color-primary: #2563eb;   /* Aquele Azul Java */
-  --color-secondary: #0f172a; /* Fundo Escuro */
-  
-  /* Configurando as fontes no tema do Tailwind */
+  /* Cores */
+  --color-primary: #2563eb;
+  --color-secondary: #0f172a;
+
+  /* Fontes */
   --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 
-  /* Definição da animação que você usou no chat */
+  /* Animações */
   --animate-fade-in-up: fade-in-up 0.3s ease-out;
 
   @keyframes fade-in-up {
@@ -29,16 +27,11 @@
   }
 }
 
-/* Estilos base que estavam no styles.scss */
 body {
-  @apply bg-secondary text-slate-200 antialiased m-0;
-  font-family: var(--font-sans);
-}
-
-/* Garanta que as classes do seu app.html (container, grid, etc) 
-   estejam aqui ou sejam convertidas para Tailwind */
-.background-grid {
-  @apply fixed inset-0 -z-10;
-  background-image: radial-gradient(#ffffff05 1px, transparent 1px);
-  background-size: 20px 20px;
+  margin: 0;
+  padding: 0;
+  background-color: #0f172a; /* Cor de fundo escura */
+  color: #f8fafc; /* Texto claro */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
 }

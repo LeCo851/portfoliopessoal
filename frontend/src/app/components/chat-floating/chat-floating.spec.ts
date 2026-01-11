@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ChatFloating } from './chat-floating';
+import { ChatFloatingComponent } from './chat-floating';
 
 describe('ChatFloating', () => {
-  let component: ChatFloating;
-  let fixture: ComponentFixture<ChatFloating>;
+  let component: ChatFloatingComponent;
+  let fixture: ComponentFixture<ChatFloatingComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ChatFloating]
+      imports: [ChatFloatingComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ChatFloating);
+    fixture = TestBed.createComponent(ChatFloatingComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
