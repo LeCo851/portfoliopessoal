@@ -12,17 +12,46 @@
     </div>
   </header>
 
+  <!-- Seção Sobre Mim -->
+  <section class="about-section">
+    <div class="about-content">
+      <h2><span class="symbol">➜</span> Sobre Mim</h2>
+      <p>
+        Desenvolvedor Full Stack apaixonado por criar soluções escaláveis e eficientes.
+        Com forte base em Java e Spring Boot, exploro o mundo da Engenharia de Dados e Inteligência Artificial
+        para entregar valor real através da tecnologia.
+      </p>
+
+      <div class="contact-links">
+        <a href="https://github.com/LeCo851" target="_blank" class="contact-item">
+          <span class="icon"></span> GitHub
+        </a>
+        <a href="https://linkedin.com/in/leandro-coelho-851" target="_blank" class="contact-item">
+          <span class="icon"></span> LinkedIn
+        </a>
+        <a href="mailto:leandro.coelho@example.com" class="contact-item">
+          <span class="icon"></span> Email
+        </a>
+      </div>
+    </div>
+  </section>
+
   <main class="grid">
     @for (item of projects(); track item.id) {
       <article class="card">
-        <div class="image-wrapper">
+        <!-- Imagem removida conforme solicitado -->
+        <!-- <div class="image-wrapper">
           <div class="img" [style.backgroundImage]="'url(' + item.imageUrl + ')'"></div>
           <div class="tech-overlay"></div>
-        </div>
+        </div> -->
 
         <div class="content">
           <div class="card-header">
-            <h2>{{ item.titulo }}</h2>
+            <h2>
+              <a [href]="item.linkGithub" target="_blank" class="project-title-link">
+                {{ item.titulo }}
+              </a>
+            </h2>
             <a [href]="item.linkGithub" target="_blank" class="git-icon" title="Ver Código">
               &lt;/&gt;
             </a>
@@ -53,5 +82,3 @@
   </main>
 
 </div><app-chat-floating></app-chat-floating>
-
-

@@ -23,7 +23,13 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.portfolioService.getProjects().subscribe({
       next: (data) => {
-        this.projects.set(data);
+        // Ordena os projetos pela quantidade de tags (decrescente)
+        const sortedData = data.sort((a, b) => {
+          const tagsA = a.tags ? a.tags.length : 0;
+          const tagsB = b.tags ? b.tags.length : 0;
+          return tagsB - tagsA;
+        });
+        this.projects.set(sortedData);
       },
       error: (err) => {
         console.error('Erro ao carregar projetos:', err);
