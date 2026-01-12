@@ -35,7 +35,7 @@ public class ChatService {
                        REGRAS:
                        1. Use APENAS o contexto abaixo para responder. Não invente.
                        2. Se não souber, diga: "Não tenho essa informação, mas contate o Leandro no LinkedIn."
-                       3. Se perguntarem de tecnologias (Java, Docker), CITE os projetos onde elas aparecem.
+                       3. Se perguntarem de tecnologias (Java, Docker), CITE alguns projetos onde elas aparecem.
                        """
                 )
                 .build();

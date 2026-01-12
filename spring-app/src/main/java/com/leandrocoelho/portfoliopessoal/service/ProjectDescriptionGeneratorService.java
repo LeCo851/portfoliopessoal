@@ -32,7 +32,7 @@ public class ProjectDescriptionGeneratorService {
                 
                 Gere um objeto JSON com:
                 1. 'titulo': Um nome comercial forte e atrativo (máx 5 palavras).
-                2. 'resumo': Um resumo técnico denso, focado em valor de negócio e arquitetura (máx 200 caracteres).
+                2. 'resumo': Um resumo técnico denso, focado em valor de negócio e arquitetura (máx 300 caracteres).
                 3. 'tecnologias': Uma LISTA (Array) com todas as ferramentas, libs e frameworks citados no README.
                 4. 'tags_extras': Sugira 2 categorias gerais do projeto (ex: Backend, DevOps, Data Science).
                 """

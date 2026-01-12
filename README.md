@@ -6,7 +6,8 @@ Este é um projeto Full Stack que automatiza a exibição de um portfólio técn
 
 ### Backend (Spring Boot)
 - **Java 21**: Versão mais recente com foco em performance.
-- **Spring Boot 3.4.x**: Framework base para a API REST.
+- **Spring Boot 3.5.x**: Framework base para a API REST.
+- **Spring JPA**: Persistência de dados.
 - **Spring AI**: Integração com OpenAI para análise inteligente dos READMEs.
 - **Spring Cache**: Otimização de chamadas à API do GitHub.
 - **Lombok**: Redução de código boilerplate.
@@ -22,6 +23,7 @@ Este é um projeto Full Stack que automatiza a exibição de um portfólio técn
 ### Infraestrutura
 - **Docker & Docker Compose**: Orquestração de containers.
 - **GitHub API**: Fonte de dados dos projetos.
+- **PostgresSQL**: Base de dados com a cópia dos resumos gerados por IA (SUPABASE)
 
 ## 🏗️ Arquitetura do Projeto
 
@@ -45,11 +47,11 @@ O projeto é dividido em dois módulos principais:
 - JDK 21
 - Node.js & Angular CLI
 - Docker (opcional)
-- Uma chave de API da OpenAI (configurada no backend)
+- Uma chave de API do Grok (configurada no backend)
 
 ### Backend
 1. Navegue até `spring-app/`.
-2. Configure sua `SPRING_AI_OPENAI_API_KEY` no arquivo de propriedades ou variável de ambiente.
+2. Configure sua `OPENAI_API_KEY` no arquivo de propriedades ou variável de ambiente.
 3. Execute: `./mvnw spring-boot:run`
 
 ### Frontend
