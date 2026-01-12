@@ -1,7 +1,7 @@
 # LEANDRO SILVA
 **Desenvolvedor Java | Engenheiro de Software**
 Rio de Janeiro, RJ
-Email: leandrocesar91@gmail.com | Linkedin | GitHub
+Email: leandrocesar91@gmail.com | Linkedin: https://www.linkedin.com/in/leco/ | GitHub : https://github.com/LeCo851
 
 ## RESUMO PROFISSIONAL
 Engenheiro químico e Bacharel em Sistemas de Informação com experiência no desenvolvimento de soluções escaláveis utilizando Java e Spring Boot.
@@ -9,10 +9,11 @@ Experiência em arquitetura de APIs RESTful, implementação de segurança com S
 Possuo domínio avançado em SQL e integração de sistemas, aliado a um forte background em Ciência de Dados e automação com Python, garantindo a construção de softwares robustos e orientados a alta performance.
 
 ## COMPETÊNCIAS TÉCNICAS
-- **Java Stack:** Java 17/21, Spring Boot, RestAPI, Spring Security, JWT, JPA, Bean Validation, JUnit, Mockito.
+- **Java Stack:** Java 17/21, Spring Boot,SpringAI, RestAPI, Spring Security, JWT, JPA, Bean Validation, JUnit, Mockito.
 - **DevOps & Infraestrutura:** Docker (Conteinerização e orquestração), monitoramento com Prometheus/Actuator/Grafana, CI/CD, Git/GitHub Actions, AWS, Oracle Cloud, GCP (Big Query).
 - **Linguagens & Scripts:** Java, Angular, Python, SQL.
 - **Inteligência Artificial:** Machine Learning, Redes Neurais (TensorFlow, PyTorch) e LLMs.
+- **Princípios de SOLID para programação**
 
 ## EXPERIÊNCIA PROFISSIONAL
 **Analista de Governança de TI / Dados | Anbima** (Jan 2022 - Presente)
@@ -25,7 +26,7 @@ Possuo domínio avançado em SQL e integração de sistemas, aliado a um forte b
 **Predição de Salários de TI (GitHub)**
 - Aplicação distribuída (Microsserviços) integrando Java 17/Spring Boot e Python (FastAPI/LightGBM) para predição salarial.
 - Frontend em Angular 21 com mapas interativos e infraestrutura automatizada via Docker e GitHub Actions.
-- Status: Em produção no Render.com.
+- Status: Em produção no Render.com (https://tcc-puc-rio-predicao-salario-ti-rais-zc9u.onrender.com/).
 
 **Gestão de Vagas - API RESTful (GitHub)**
 - Sistema backend para RH desenvolvido com Java 17, Spring Boot, Spring Security (JWT) e Docker.

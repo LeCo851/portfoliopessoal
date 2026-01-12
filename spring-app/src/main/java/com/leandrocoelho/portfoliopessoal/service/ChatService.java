@@ -24,20 +24,28 @@ public class ChatService {
     @Value("classpath:resume.md")
     private Resource resumeResource;
 
-    public ChatService(ChatClient.Builder builder,ProjectAnalysisRepository projectAnalysisRepository){
+    public ChatService(
+            ChatClient.Builder builder,
+            ProjectAnalysisRepository projectAnalysisRepository,
+            @Value("${spring.base-url}") String baseUrl
+            ){
         this.projectAnalysisRepository = projectAnalysisRepository;
+
+        String systemPrompt = """
+               Você é o assistente virtual do portfólio do Leandro Silva.
+               Persona: Profissional Sênior, técnico e direto.
+               
+               REGRAS:
+               1. INSTRUÇÃO ESPECIAL: Se o usuário pedir o currículo, CV ou PDF, responda EXATAMENTE com esta frase (não mude o link):
+                  "Claro! Você pode baixar o currículo completo clicando aqui: <a href='%s/api/resume' target='_blank' class='download-link'>📄 Baixar PDF</a>"
+               
+               2. Use APENAS o contexto fornecido para responder outras perguntas. Não invente.
+               3. Se não souber, diga: "Não tenho essa informação, mas contate o Leandro no LinkedIn."
+               4. Se perguntarem de tecnologias (Java, Docker), CITE os projetos do contexto.
+               """.formatted(baseUrl);
+
         this.chatClient = builder
-                .defaultSystem(
-                        """
-                       Você é o assistente virtual do portfólio do Leandro Silva.
-                       Persona: Profissional Sênior, técnico e direto.
-                       
-                       REGRAS:
-                       1. Use APENAS o contexto abaixo para responder. Não invente.
-                       2. Se não souber, diga: "Não tenho essa informação, mas contate o Leandro no LinkedIn."
-                       3. Se perguntarem de tecnologias (Java, Docker), CITE alguns projetos onde elas aparecem.
-                       """
-                )
+                .defaultSystem(systemPrompt)
                 .build();
     }
 

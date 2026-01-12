@@ -1,79 +1,152 @@
-<div class="background-grid"></div> <div class="container">
-  <header class="dashboard-header">
-    <div class="logo-area">
-      <span class="symbol">⬢</span> <div class="text">
-      <h1>LECO.DEV<span class="cursor">_</span></h1>
-      <small>Engenharia • Dados • Backend</small>
-    </div>
-    </div>
+<div class="main-wrapper" [class]="rgbMode()">
 
-    <div class="status-badge">
-      <span class="dot"></span> System Online
-    </div>
-  </header>
+  <div class="background-grid"></div>
 
-  <!-- Seção Sobre Mim -->
-  <section class="about-section">
-    <div class="about-content">
-      <h2><span class="symbol">➜</span> Sobre Mim</h2>
-      <p>
-        Desenvolvedor Full Stack apaixonado por criar soluções escaláveis e eficientes.
-        Com forte base em Java e Spring Boot, exploro o mundo da Engenharia de Dados e Inteligência Artificial
-        para entregar valor real através da tecnologia.
-      </p>
+  <!-- Efeito LED RGB Traces (Circuito de Fundo) -->
+  <svg class="led-traces" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <!-- Gradiente Linear para o efeito Rainbow -->
+      <linearGradient id="led-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#ff0000" />
+        <stop offset="20%" stop-color="#ffff00" />
+        <stop offset="40%" stop-color="#00ff00" />
+        <stop offset="60%" stop-color="#00ffff" />
+        <stop offset="80%" stop-color="#0000ff" />
+        <stop offset="100%" stop-color="#ff00ff" />
+      </linearGradient>
 
-      <div class="contact-links">
-        <a href="https://github.com/LeCo851" target="_blank" class="contact-item">
-          <i class="fab fa-github"></i> GitHub
-        </a>
-        <a href="https://linkedin.com/in/leco" target="_blank" class="contact-item">
-          <i class="fab fa-linkedin"></i> LinkedIn
-        </a>
-        <a href="mailto:leandrocesar91@gmail.com" class="contact-item">
-          <i class="fas fa-envelope"></i> Email
-        </a>
+      <!-- Filtro de Glow (Brilho Neon) -->
+      <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="5" result="coloredBlur"/>
+        <feMerge>
+          <feMergeNode in="coloredBlur"/>
+          <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+      </filter>
+    </defs>
+
+    <!-- Caminho 1: Topo Esquerdo (Horizontal) -->
+    <path class="trace trace-1" d="M -50,100 L 300,100 L 350,50 L 600,50" />
+
+    <!-- Caminho 2: Lateral Direita (Vertical) -->
+    <path class="trace trace-2" d="M 95%,100% L 95%,600 L 90%,550 L 90%,0" />
+
+    <!-- Caminho 3: Centro (Curva S) -->
+    <path class="trace trace-3" d="M 0,500 L 200,500 L 300,600 L 800,600 L 900,700 L 1200,700" />
+
+    <!-- Caminho 4: Lateral Esquerda (Zigue Zague) -->
+    <path class="trace trace-4" d="M 50,0 L 50,300 L 100,350 L 100,800" />
+
+    <!-- Caminho 5: Cruzamento Diagonal -->
+    <path class="trace trace-5" d="M 20%,0 L 20%,200 L 60%,600 L 60%,100%" />
+
+    <!-- Caminho 6: Rodapé (Longo) -->
+    <path class="trace trace-6" d="M 100%,90% L 70%,90% L 60%,80% L 10%,80% L 0,70%" />
+
+    <!-- Caminho 7: Topo Direito (Curto) -->
+    <path class="trace trace-7" d="M 60%,0 L 60%,100 L 90%,100 L 100%,200" />
+  </svg>
+
+  <div class="container">
+    <header class="dashboard-header">
+      <div class="logo-area">
+        <!-- Ícone Power Button (Botão Computador) -->
+        <i class="fas fa-power-off symbol"></i>
+        <div class="text">
+          <h1>LECO.DEV<span class="cursor">_</span></h1>
+          <small>Engenharia • Dados • Backend</small>
+        </div>
       </div>
-    </div>
-  </section>
 
-  <main class="grid">
-    @for (item of projects(); track item.id) {
-      <article class="card">
+      <div class="header-controls">
+        <!-- Botão RGB Controller -->
+        <button class="rgb-control-btn" (click)="cycleRgbMode()" [title]="'RGB Mode: ' + rgbMode()">
+          <i class="fas fa-palette"></i>
+          <span class="mode-label">{{ rgbMode() }}</span>
+        </button>
 
-        <div class="content">
-          <div class="card-header">
-            <h2>
-              <a [href]="item.linkGithub" target="_blank" class="project-title-link">
-                {{ item.titulo }}
-              </a>
-            </h2>
-            <a [href]="item.linkGithub" target="_blank" class="git-icon" title="Ver Código">
-              &lt;/&gt;
-            </a>
-          </div>
+        <div class="status-badge">
+          <span class="dot"></span> System Online
+        </div>
+      </div>
+    </header>
 
-          <p class="description">{{ item.resumo }}</p>
-
-          <div class="specs">
-            <span class="label">STACK_TRACE:</span>
-            <div class="tags">
-              @for (tag of item.tags; track tag) {
-                <span class="tag"
-                      [class.backend]="tag.includes('Java') || tag.includes('Spring')"
-                      [class.data]="tag.includes('Data') || tag.includes('Python') || tag.includes('Machine')">
-                  {{ tag }}
-                </span>
-              }
-            </div>
+    <!-- Seção Sobre Mim -->
+    <section class="about-section">
+      <div class="about-container">
+        <!-- Área da Foto -->
+        <div class="profile-photo-container">
+          <div class="photo-frame">
+            <!-- Placeholder para a foto (pode ser substituído por <img> depois) -->
+            <i class="fas fa-user-astronaut placeholder-icon"></i>
           </div>
         </div>
-      </article>
-    } @empty {
-      <div class="loading-terminal">
-        > Initializing Neural Link...<br>
-        > Fetching Repositories...<span class="cursor">█</span>
-      </div>
-    }
-  </main>
 
-</div><app-chat-floating></app-chat-floating>
+        <div class="about-content">
+          <h2><span class="symbol">➜</span> Sobre Mim</h2>
+          <p>
+            Desenvolvedor Full Stack apaixonado por criar soluções escaláveis e eficientes.
+            Com forte base em Java e Spring Boot, exploro o mundo da Engenharia de Dados e Inteligência Artificial
+            para entregar valor real através da tecnologia.
+          </p>
+
+          <div class="contact-links">
+            <a href="https://github.com/LeCo851" target="_blank" class="contact-item">
+              <i class="fab fa-github"></i> GitHub
+            </a>
+            <a href="https://linkedin.com/in/leco" target="_blank" class="contact-item">
+              <i class="fab fa-linkedin"></i> LinkedIn
+            </a>
+            <a href="mailto:leandrocesar91@gmail.com" class="contact-item">
+              <i class="fas fa-envelope"></i> Email
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <main class="grid">
+      @for (item of projects(); track item.id) {
+        <article class="card">
+
+          <div class="content">
+            <div class="card-header">
+              <h2>
+                <a [href]="item.linkGithub" target="_blank" class="project-title-link">
+                  {{ item.titulo }}
+                </a>
+              </h2>
+              <a [href]="item.linkGithub" target="_blank" class="git-icon" title="Ver Código">
+                &lt;/&gt;
+              </a>
+            </div>
+
+            <p class="description">{{ item.resumo }}</p>
+
+            <div class="specs">
+              <span class="label">STACK_TRACE:</span>
+              <div class="tags">
+                @for (tag of item.tags; track tag) {
+                  <span class="tag"
+                        [class.backend]="tag.includes('Java') || tag.includes('Spring')"
+                        [class.data]="tag.includes('Data') || tag.includes('Python') || tag.includes('Machine')">
+                    {{ tag }}
+                  </span>
+                }
+              </div>
+            </div>
+          </div>
+        </article>
+      } @empty {
+        <div class="loading-terminal">
+          > Initializing Neural Link...<br>
+          > Fetching Repositories...<span class="cursor">█</span>
+        </div>
+      }
+    </main>
+
+  </div>
+
+  <app-chat-floating [rgbMode]="rgbMode()"></app-chat-floating>
+
+</div>

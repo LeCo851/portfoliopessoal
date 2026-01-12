@@ -3,6 +3,7 @@ package com.leandrocoelho.portfoliopessoal.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ProjectAnalysisEntity {
 
     @Id
@@ -39,4 +41,6 @@ public class ProjectAnalysisEntity {
 
         return this.lastUpdate.getEpochSecond() == githubUpdateDate.getEpochSecond();
     }
+    @Column(columnDefinition = "TEXT")
+    private String architectureDiagram;
 }

@@ -6,6 +6,8 @@ spring:
     virtual:
       enabled: true
 
+  base-url: http://localhost:8080
+
   # Configuração da IA (Groq)
   ai:
     openai:
@@ -13,7 +15,7 @@ spring:
       base-url: https://api.groq.com/openai # URL mágica que faz o Spring falar com a Groq
       chat:
         options:
-          model: llama-3.3-70b-versatile # Ou 'mixtral-8x7b-32768'
+          model: meta-llama/llama-4-scout-17b-16e-instruct #llama-3.3-70b-versatile # Ou 'mixtral-8x7b-32768'
           temperature: 0.1
 
   # Cache (Essencial para não gastar API do GitHub/Groq a cada F5)

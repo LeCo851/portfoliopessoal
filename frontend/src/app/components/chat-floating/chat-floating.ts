@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, signal, inject } from '@angular/core';
+import { Component, ViewEncapsulation, signal, inject , ViewChild, ElementRef, effect, Input} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 
@@ -32,11 +32,53 @@ interface Message {
   encapsulation: ViewEncapsulation.None
 })
 export class ChatFloatingComponent {
+  @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
+
+  // Recebe o modo RGB do componente pai (Usando @Input tradicional para compatibilidade)
+  @Input() rgbMode: string = 'rainbow';
+
+  constructor(private http: HttpClient) {
+    // 2. Criamos um "Efeito" que vigia o signal de mensagens
+    effect(() => {
+      // Apenas lendo o signal, o Angular sabe que deve rodar isso quando ele mudar
+      const msgs = this.messages();
+      const loading = this.isLoading(); // Também vigia o loading
+
+      // Pequeno delay para dar tempo do HTML renderizar a nova mensagem
+      setTimeout(() => {
+        this.scrollToBottom();
+      }, 100);
+    });
+  }
+  scrollToBottom(): void {
+    if (this.scrollContainer) {
+      const element = this.scrollContainer.nativeElement;
+      // Define a posição do scroll igual à altura total do conteúdo
+      element.scrollTop = element.scrollHeight;
+    }
+  }
+
+  // ADICIONE ESTA FUNÇÃO:
+  formatMessage(text: string): string {
+    if (!text) return '';
+
+    // 1. Converte **texto** para <strong>texto</strong> (Negrito)
+    let formatted = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+    // 2. Converte * item para • item (Lista) com quebra de linha
+    formatted = formatted.replace(/^\* /gm, '<br>• ');
+
+    // 3. Converte quebras de linha normais para <br>
+    formatted = formatted.replace(/\n/g, '<br>');
+
+    return formatted;
+  }
   // Injeção moderna (sem construtor)
-  private http = inject(HttpClient);
+  //private http = inject(HttpClient);
 
   // Signals (O coração do Angular 21)
   isOpen = signal(false);
+  isExpanded = signal(false); // Novo signal para controlar a expansão
   isLoading = signal(false);
   userQuestion = signal(''); // Transformei o input em signal também (opcional, mas bom)
 
@@ -46,6 +88,10 @@ export class ChatFloatingComponent {
 
   toggleChat() {
     this.isOpen.update(v => !v);
+  }
+
+  toggleExpand() {
+    this.isExpanded.update(v => !v);
   }
 
   sendMessage() {

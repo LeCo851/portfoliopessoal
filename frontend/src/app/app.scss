@@ -1,72 +1,188 @@
-// --- Variáveis do Tema (Cyberpunk 2077 Style) ---
-$bg-dark: #02020a;       // Preto Azulado Profundo
-$card-bg: #0a0a14;       // Cinza Escuro Tech
-$border-color: #2a2a35;  // Cinza Metálico
-$text-main: #e0e0e0;     // Branco Gelo
-$text-dim: #858595;      // Cinza Tecnológico
+// --- Variáveis do Tema (Premium PC Gamer / Hardware Style) ---
+$bg-dark: #050505;       // Preto Absoluto (Gabinete)
+$glass-bg: rgba(20, 20, 25, 0.75); // Vidro Temperado Fumê
+$border-glass: rgba(255, 255, 255, 0.1); // Borda do vidro
+$text-main: #ffffff;     // Branco LED
+$text-dim: #a0a0a0;      // Cinza Metálico
 
-// Cores Neon
-$neon-pink: #ff0055;     // Rosa Choque
-$neon-cyan: #00f3ff;     // Ciano Elétrico
-$neon-yellow: #ffee00;   // Amarelo Alerta
+// Fontes
+$font-hud: 'Segoe UI', 'Roboto', sans-serif; // Interface Limpa
+$font-digital: 'Courier New', monospace;     // Dados/Display
 
-$font-tech: 'Courier New', Courier, monospace; // Fonte Mono para dados
-$font-display: 'Segoe UI', sans-serif;         // Fonte Sans para títulos
+// --- DEFINIÇÃO DOS MODOS RGB (CSS Variables) ---
+// Aplicado ao wrapper principal para afetar tudo dentro
+.main-wrapper {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
 
-// --- Fundo Dinâmico (Grid Retrowave) ---
+  // Default (Rainbow)
+  --rgb-gradient: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+  --accent-color: #00ff00; // Cor principal (ex: status dot)
+
+  // Variável específica para o SVG Trace
+  // Por padrão usa o gradiente definido no HTML
+  --trace-stroke: url(#led-gradient);
+
+  &.rainbow {
+    --rgb-gradient: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+    --accent-color: #00ff00;
+    --trace-stroke: url(#led-gradient);
+  }
+
+  &.cyberpunk {
+    --rgb-gradient: linear-gradient(45deg, #ff0055, #00f3ff, #ff0055, #00f3ff);
+    --accent-color: #00f3ff;
+    --trace-stroke: #00f3ff; // Cor sólida para SVG
+  }
+
+  &.red {
+    --rgb-gradient: linear-gradient(45deg, #ff0000, #550000, #ff0000, #550000);
+    --accent-color: #ff0000;
+    --trace-stroke: #ff0000; // Cor sólida para SVG
+  }
+
+  &.stealth {
+    --rgb-gradient: linear-gradient(45deg, #333, #555, #333, #555); // Apenas cinza
+    --accent-color: #ffffff;
+    --trace-stroke: #333; // Cor sólida para SVG
+  }
+}
+
+// --- Animação RGB Chroma (Rainbow Wave) ---
+@keyframes rgb-wave {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+// Mixin para Borda RGB
+@mixin rgb-border {
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -1px; // Borda externa
+    z-index: -1;
+    background: var(--rgb-gradient); // Usa a variável dinâmica
+    background-size: 400%;
+    animation: rgb-wave 20s linear infinite;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  &:hover::before {
+    opacity: 1;
+  }
+}
+
+// --- Fundo "Mesh Frontal" (Gabinete Perfurado) ---
 .background-grid {
   position: fixed;
   top: 0; left: 0; width: 100vw; height: 100vh;
-  z-index: -1;
+  z-index: -2; // Atrás do SVG
   background-color: $bg-dark;
 
-  // Grade de perspectiva
-  background-image:
-    linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 0, 85, 0.05) 1px, transparent 1px);
-  background-size: 60px 60px;
+  // Padrão de furos hexagonais/circulares
+  background-image: radial-gradient(#1a1a1a 15%, transparent 16%), radial-gradient(#1a1a1a 15%, transparent 16%);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
 
-  // Vignette para focar no centro
-  mask-image: radial-gradient(circle at center, black 30%, transparent 100%);
+  // Vignette escura para foco
+  mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+}
+
+// --- LED Traces (SVG Background) ---
+.led-traces {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  z-index: -1; // Entre o fundo e o conteúdo
+  pointer-events: none;
+  opacity: 0.8; // Mais visível
+
+  .trace {
+    fill: none;
+    stroke-width: 4; // Mais grosso (padrão)
+    stroke-linecap: round;
+    stroke-dasharray: 200 2000; // Pulso curto (200px), intervalo longo (2000px)
+    stroke-dashoffset: 2000;
+    animation: trace-anim 8s linear infinite;
+    filter: url(#glow); // Brilho Neon
+
+    // Usa a variável definida no .main-wrapper
+    stroke: var(--trace-stroke);
+  }
+
+  // Variações Aleatórias (Espessura, Velocidade, Delay, Opacidade)
+  .trace-1 { stroke-width: 5; animation-duration: 5s; animation-delay: 0s; opacity: 1; }
+  .trace-2 { stroke-width: 3; animation-duration: 8s; animation-delay: 2s; opacity: 0.7; }
+  .trace-3 { stroke-width: 6; animation-duration: 12s; animation-delay: 1s; opacity: 0.9; }
+  .trace-4 { stroke-width: 4; animation-duration: 6s; animation-delay: 3s; opacity: 0.8; }
+  .trace-5 { stroke-width: 2; animation-duration: 10s; animation-delay: 5s; opacity: 0.5; }
+  .trace-6 { stroke-width: 5; animation-duration: 7s; animation-delay: 0.5s; opacity: 1; }
+  .trace-7 { stroke-width: 3; animation-duration: 4s; animation-delay: 4s; opacity: 0.6; }
+}
+
+// Animação do traço percorrendo o caminho
+@keyframes trace-anim {
+  to {
+    stroke-dashoffset: -2000; // Move para o outro lado
+  }
 }
 
 .container {
   max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
-  font-family: $font-display;
+  font-family: $font-hud;
+  position: relative; // Garante z-index correto
+  z-index: 1;
 }
 
-// --- Header Cyberpunk ---
+// --- Header "Water Cooler Display" ---
 .dashboard-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 4rem;
-  border-bottom: 2px solid $border-color;
-  padding-bottom: 1rem;
+  padding: 1.5rem;
+  background: $glass-bg;
+  backdrop-filter: blur(12px); // Efeito Vidro
+  border: 1px solid $border-glass;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
   position: relative;
+  overflow: hidden;
 
-  // Barra de progresso decorativa
+  // Linha RGB inferior
   &::after {
     content: '';
     position: absolute;
-    bottom: -2px; left: 0; width: 30%;
-    height: 2px;
-    background: $neon-cyan;
-    box-shadow: 0 0 10px $neon-cyan;
+    bottom: 0; left: 0; width: 100%; height: 2px;
+    background: var(--rgb-gradient); // Dinâmico
+    background-size: 200% 200%;
+    animation: rgb-wave 5s linear infinite;
   }
 
   .logo-area {
     display: flex;
     align-items: center;
-    gap: 1.5rem; // Aumentado o gap para separar o ícone do texto
+    gap: 1.5rem;
 
     .symbol {
       font-size: 2.5rem;
-      color: $neon-yellow;
-      text-shadow: 2px 2px 0px $neon-pink; // Efeito Glitch estático
-      flex-shrink: 0; // Impede que o ícone encolha
+      // Efeito metálico no ícone
+      background: linear-gradient(135deg, #fff 0%, #888 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 5px rgba(255,255,255,0.3));
+
+      // ADICIONADO: Cor dinâmica baseada no tema
+      color: var(--accent-color);
+      text-shadow: 0 0 10px var(--accent-color);
+      // Remove o background-clip para que a cor funcione
+      background: none;
+      -webkit-text-fill-color: initial;
     }
 
     .text {
@@ -77,116 +193,219 @@ $font-display: 'Segoe UI', sans-serif;         // Fonte Sans para títulos
 
     h1 {
       margin: 0;
-      font-size: 2.2rem;
+      font-size: 2rem;
       font-weight: 800;
       color: $text-main;
       text-transform: uppercase;
-      letter-spacing: 2px;
-      font-family: $font-display;
-      line-height: 1.1; // Ajuste de altura de linha
-
-      // Efeito de texto cortado
-      background: linear-gradient(90deg, $text-main 0%, $text-main 100%);
-      -webkit-background-clip: text;
+      letter-spacing: 1px;
+      text-shadow: 0 0 10px rgba(255,255,255,0.1);
     }
 
     small {
-      color: $neon-cyan;
-      font-family: $font-tech;
-      font-size: 0.85rem;
-      letter-spacing: 1px;
+      color: $text-dim;
+      font-family: $font-digital;
+      font-size: 0.8rem;
+      letter-spacing: 2px;
       text-transform: uppercase;
-      display: block; // Garante que fique em linha separada
-      margin-top: 2px;
+      margin-top: 4px; // Adicionado margem extra para separar do título
     }
   }
 
-  .status-badge {
-    font-family: $font-tech;
-    font-size: 0.8rem;
-    color: $bg-dark;
-    background: $neon-yellow;
-    padding: 6px 16px;
-    clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%); // Forma angular
-    font-weight: bold;
+  .header-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  // Botão Controlador RGB
+  .rgb-control-btn {
+    background: rgba(0,0,0,0.5);
+    border: 1px solid $border-glass;
+    color: $text-main;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: $font-digital;
     text-transform: uppercase;
     display: flex;
     align-items: center;
     gap: 8px;
+    transition: all 0.2s;
+
+    &:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: var(--accent-color);
+      color: var(--accent-color);
+      box-shadow: 0 0 10px var(--accent-color);
+    }
+
+    .mode-label {
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+  }
+
+  .status-badge {
+    font-family: $font-digital;
+    font-size: 0.9rem;
+    color: var(--accent-color); // Dinâmico
+    background: rgba(0, 0, 0, 0.3);
+    padding: 8px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 
     .dot {
-      width: 8px; height: 8px;
-      background: $bg-dark;
-      border-radius: 0; // Quadrado
-      animation: blink 1s infinite;
+      width: 6px; height: 6px;
+      background: var(--accent-color); // Dinâmico
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--accent-color);
+      animation: pulse 2s infinite;
     }
   }
 }
 
-// --- Seção Sobre Mim ---
+// --- Seção Sobre Mim (Painel Lateral) ---
 .about-section {
   margin-bottom: 4rem;
-  background: rgba(10, 10, 20, 0.8);
-  border: 1px solid $border-color;
-  border-left: 4px solid $neon-pink;
+  background: $glass-bg;
+  backdrop-filter: blur(10px);
+  border: 1px solid $border-glass;
+  border-radius: 12px;
   padding: 2rem;
   position: relative;
 
-  // Canto cortado decorativo
-  &::before {
-    content: '';
+  // Detalhe "Parafuso" nos cantos
+  &::before, &::after {
+    content: '+';
     position: absolute;
-    top: -1px; right: -1px;
-    border-width: 0 20px 20px 0;
-    border-style: solid;
-    border-color: transparent $neon-cyan transparent transparent;
+    color: $border-glass;
+    font-family: monospace;
+  }
+  &::before { top: 10px; left: 10px; }
+  &::after { bottom: 10px; right: 10px; }
+
+  // Layout Flex para Foto + Texto
+  .about-container {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+
+  // Estilo da Moldura da Foto
+  .profile-photo-container {
+    flex-shrink: 0;
+
+    .photo-frame {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%; // Circular
+      background: rgba(0,0,0,0.3);
+      border: 2px solid $border-glass;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+
+      // Borda RGB Animada
+      &::after {
+        content: '';
+        position: absolute;
+        inset: -2px;
+        border-radius: 50%;
+        padding: 2px;
+        background: var(--rgb-gradient);
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        animation: spin 4s linear infinite;
+      }
+
+      // Placeholder Icon
+      .placeholder-icon {
+        font-size: 4rem;
+        color: var(--accent-color);
+        opacity: 0.5;
+      }
+
+      // Se tiver imagem real (img tag)
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
   }
 
   .about-content {
+    flex: 1;
+
     h2 {
       font-size: 1.8rem;
-      color: $neon-pink;
+      color: $text-main;
       margin-bottom: 1rem;
+      font-weight: 700;
       text-transform: uppercase;
-      font-weight: 800;
-      text-shadow: 0 0 5px rgba(255, 0, 85, 0.5);
-
-      .symbol { color: $neon-cyan; margin-right: 10px; }
+      border-left: 4px solid #fff;
+      padding-left: 1rem;
     }
 
     p {
-      color: $text-main;
+      color: $text-dim;
       font-size: 1.1rem;
       line-height: 1.7;
       margin-bottom: 2rem;
       max-width: 800px;
-      font-family: $font-display;
     }
 
     .contact-links {
       display: flex;
-      gap: 1.5rem;
+      gap: 1rem;
       flex-wrap: wrap;
+
+      @media (max-width: 768px) {
+        justify-content: center;
+      }
 
       .contact-item {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
-        color: $neon-cyan;
+        gap: 0.8rem;
+        color: $text-main;
         text-decoration: none;
-        font-family: $font-tech;
+        font-family: $font-hud;
         font-size: 0.9rem;
-        padding: 8px 20px;
-        border: 1px solid $neon-cyan;
+        padding: 12px 24px;
+        background: #1a1a1a; // Tecla escura
+        border: 1px solid #333;
+        border-radius: 6px; // Levemente arredondado (Keycap)
         transition: all 0.2s ease;
+        font-weight: 600;
         text-transform: uppercase;
-        font-weight: bold;
+        position: relative;
+        overflow: hidden;
 
+        // Efeito RGB no Hover
         &:hover {
-          background: $neon-cyan;
-          color: $bg-dark;
-          box-shadow: 0 0 15px $neon-cyan;
+          transform: translateY(-2px);
+          border-color: transparent;
+          color: #fff;
+          box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+          background: #252525;
         }
+
+        // Borda RGB oculta que aparece no hover (via background-origin trick ou pseudo-element)
+        @include rgb-border;
       }
     }
   }
@@ -195,47 +414,53 @@ $font-display: 'Segoe UI', sans-serif;         // Fonte Sans para títulos
 // --- Grid de Projetos ---
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 2.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 2rem;
   align-items: start;
 }
 
-// --- Card Cyberpunk ---
+// --- Card "Vidro Temperado" ---
 .card {
-  background: $card-bg;
-  border: 1px solid $border-color;
-  padding: 0; // Reset padding para usar no content
+  background: rgba(15, 15, 20, 0.6); // Mais transparente
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 0;
   transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
   height: 100%;
   position: relative;
+  overflow: hidden;
 
-  // Forma com canto cortado (Cyberpunk signature)
-  clip-path: polygon(
-    0 0,
-    100% 0,
-    100% 85%,
-    92% 100%,
-    0 100%
-  );
+  // Reflexo do vidro
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%; width: 50%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+    transform: skewX(-25deg);
+    transition: 0.5s;
+    pointer-events: none;
+  }
 
-  // Borda brilhante no hover
   &:hover {
     transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+    border-color: rgba(255, 255, 255, 0.2);
 
+    &::before {
+      left: 150%;
+    }
+
+    // RGB Glow na parte inferior
     &::after {
       content: '';
       position: absolute;
-      inset: 0;
-      border: 1px solid $neon-pink;
-      pointer-events: none;
-      z-index: 10;
-    }
-
-    h2 .project-title-link {
-      color: $neon-cyan;
-      text-shadow: 0 0 8px rgba(0, 243, 255, 0.5);
+      bottom: 0; left: 0; width: 100%; height: 3px;
+      background: var(--rgb-gradient); // Dinâmico
+      background-size: 200%;
+      animation: rgb-wave 3s linear infinite;
     }
   }
 
@@ -244,7 +469,6 @@ $font-display: 'Segoe UI', sans-serif;         // Fonte Sans para títulos
     display: flex;
     flex-direction: column;
     height: 100%;
-    border-top: 2px solid $neon-cyan; // Topo colorido
 
     .card-header {
       display: flex;
@@ -253,16 +477,17 @@ $font-display: 'Segoe UI', sans-serif;         // Fonte Sans para títulos
       margin-bottom: 1rem;
 
       h2 {
-        font-size: 1.1rem; // Reduzido de 1.4rem para 1.1rem
+        font-size: 1.3rem;
         margin: 0;
         font-weight: 700;
+        line-height: 1.3;
         text-transform: uppercase;
-        line-height: 1.2;
+        letter-spacing: 0.5px;
 
         .project-title-link {
           color: $text-main;
           text-decoration: none;
-          transition: all 0.2s;
+          transition: color 0.2s;
         }
       }
 
@@ -270,18 +495,20 @@ $font-display: 'Segoe UI', sans-serif;         // Fonte Sans para títulos
         color: $text-dim;
         text-decoration: none;
         font-size: 1.2rem;
-        transition: color 0.2s;
-        &:hover { color: $neon-pink; text-shadow: 0 0 5px $neon-pink; }
+        transition: all 0.2s;
+        &:hover {
+          color: #fff;
+          text-shadow: 0 0 8px rgba(255,255,255,0.5);
+        }
       }
     }
 
     .description {
       color: $text-dim;
-      font-size: 0.95rem;
+      font-size: 1rem;
       line-height: 1.6;
       margin-bottom: 1.5rem;
       flex-grow: 1;
-      font-family: $font-display;
     }
 
     .specs {
@@ -293,30 +520,34 @@ $font-display: 'Segoe UI', sans-serif;         // Fonte Sans para títulos
         gap: 8px;
 
         .tag {
-          font-family: $font-tech;
+          font-family: $font-digital;
           font-size: 0.7rem;
-          padding: 4px 8px;
+          padding: 4px 10px;
+          border-radius: 4px;
+          font-weight: 600;
+          letter-spacing: 1px;
           text-transform: uppercase;
-          font-weight: bold;
-          letter-spacing: 0.5px;
           border: 1px solid transparent;
 
-          // Default
+          // Default (Cinza)
           background: rgba(255, 255, 255, 0.05);
-          color: $text-main;
+          color: $text-dim;
+          border-color: rgba(255, 255, 255, 0.1);
 
-          // Backend (Pink)
+          // Backend (Laranja/Cobre - Heatpipes)
           &.backend {
-            color: #ff80ab; // Rosa mais claro para melhor leitura
-            border-color: rgba(255, 0, 85, 0.5);
-            background: rgba(255, 0, 85, 0.1);
+            color: #ffaa00;
+            background: rgba(255, 170, 0, 0.1);
+            border-color: rgba(255, 170, 0, 0.3);
+            box-shadow: 0 0 5px rgba(255, 170, 0, 0.1);
           }
 
-          // Data (Cyan)
+          // Data (Azul - Coolant)
           &.data {
-            color: $neon-cyan;
-            border-color: rgba(0, 243, 255, 0.3);
-            background: rgba(0, 243, 255, 0.05);
+            color: #00d9ff;
+            background: rgba(0, 217, 255, 0.1);
+            border-color: rgba(0, 217, 255, 0.3);
+            box-shadow: 0 0 5px rgba(0, 217, 255, 0.1);
           }
         }
       }
@@ -327,6 +558,12 @@ $font-display: 'Segoe UI', sans-serif;         // Fonte Sans para títulos
 // --- Animações ---
 .cursor { animation: blink 1s step-end infinite; }
 @keyframes blink { 50% { opacity: 0; } }
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+@keyframes spin { 100% { transform: rotate(360deg); } }
 
 // Responsivo
 @media (max-width: 768px) {

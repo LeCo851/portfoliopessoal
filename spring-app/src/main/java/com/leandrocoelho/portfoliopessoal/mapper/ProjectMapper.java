@@ -30,26 +30,26 @@ public class ProjectMapper {
         if (analysis.tecnologias() != null) combinedTags.addAll(analysis.tecnologias());
         if (analysis.tags_extras() != null) combinedTags.addAll(analysis.tags_extras());
 
-        return new ProjectAnalysisEntity(
-                repo.name(),
-                analysis.titulo(),
-                analysis.resumo(),
-                combinedTags,
-                "https://github.com/LeCo851/" + repo.name() + "/raw/main/cover.png",
-                repo.html_url(),
-                repo.updated_at()
-        );
+        return ProjectAnalysisEntity.builder()
+                .id(repo.name())
+                .titulo(analysis.titulo())
+                .resumo(analysis.resumo())
+                .tags(combinedTags)
+                .imageUrl("https://github.com/LeCo851/" + repo.name() + "/raw/main/cover.png")
+                .linkGithub(repo.html_url())
+                .lastUpdate(repo.updated_at())
+                .build();
+
     }
 
-    public ProjectAnalysisEntity toBasicEntity(GitHubRepositoryDTO repositoryDTO){
-        return new ProjectAnalysisEntity(
-                repositoryDTO.name(),
-                repositoryDTO.name(),
-                repositoryDTO.description() != null ? repositoryDTO.description() : "Análise detalhada indisponível no momento",
-                repositoryDTO.topics() != null ? repositoryDTO.topics() : Collections.emptyList(),
-                "https://github.com/LeCo851/" + repositoryDTO.name() + "/raw/main/cover.png",
-                repositoryDTO.html_url(),
-                repositoryDTO.updated_at()
-        );
-    }
+    public ProjectAnalysisEntity toBasicEntity(GitHubRepositoryDTO repo) {
+        return ProjectAnalysisEntity.builder()
+                .id(repo.name())
+                .resumo(repo.description() != null ? repo.description() : "Análise detalhada indisponível no momento")
+                .tags(repo.topics() != null ? repo.topics() : Collections.emptyList())
+                .imageUrl("https://github.com/LeCo851/" + repo.name() + "/raw/main/cover.png")
+                .linkGithub(repo.html_url())
+                .lastUpdate(repo.updated_at())
+                .build();
+    };
 }
