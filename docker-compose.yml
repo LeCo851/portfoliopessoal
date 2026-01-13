@@ -1,0 +1,36 @@
+services:
+  # --- SERVIÇO BACKEND ---
+  backend:
+    build: ./spring-app # Caminho da pasta do Java
+    container_name: portfolio-backend
+    restart: always
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - JAVA_TOOL_OPTIONS=-Djava.net.preferIPv4Stack=true
+      - DB_PASSWORD=${DB_PASSWORD}     # Pega do arquivo .env
+      - GROQ_API_KEY=${GROQ_API_KEY}   # Pega do arquivo .env
+      - GITHUB_TOKEN=${GITHUB_TOKEN}   # Pega do arquivo .env
+      # URL do Supabase (A porta 6543 do pooler Transaction é melhor pra prod)
+      - SPRING_DATASOURCE_USERNAME=postgres.vorzuewlvjsveyeoorvu
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://aws-1-sa-east-1.pooler.supabase.com:6543/postgres?
+    networks:
+      - portfolio-network
+
+  # --- SERVIÇO FRONTEND ---
+  frontend:
+    build: ./frontend # Caminho da pasta do Angular (ajuste o nome)
+    container_name: portfolio-frontend
+    restart: always
+    ports:
+      - "8081:80" # Acessível no navegador via localhost (sem porta)
+    depends_on:
+      - backend
+    networks:
+      - portfolio-network
+
+networks:
+  portfolio-network:
+    driver: bridge

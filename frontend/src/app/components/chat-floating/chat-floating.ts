@@ -1,6 +1,7 @@
 import { Component, ViewEncapsulation, signal, inject , ViewChild, ElementRef, effect, Input} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { environment} from '../../../environments/environment'
 
 // Material Imports
 import { MatButtonModule } from '@angular/material/button';
@@ -104,7 +105,7 @@ export class ChatFloatingComponent {
     this.isLoading.set(true);
 
     // 2. Chama Backend
-    this.http.post<any>('http://localhost:8080/api/chat', { question })
+    this.http.post<any>(`${environment.apiUrl}/chat`, { question })
       .subscribe({
         next: (res) => {
           this.messages.update(msgs => [...msgs, { text: res.answer, isUser: false }]);

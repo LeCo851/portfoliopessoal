@@ -30,14 +30,32 @@ spring:
 
   datasource:
 
-    url: jdbc:postgresql://db.vorzuewlvjsveyeoorvu.supabase.co:5432/postgres
-    username: postgres
+    url: jdbc:postgresql://aws-1-sa-east-1.pooler.supabase.com:6543/postgres?
+    username: postgres.vorzuewlvjsveyeoorvu
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
+    hikari:
+      # Essas configurações são CRÍTICAS para Transaction Pooler (Porta 6543)
+      maximum-pool-size: 10
+      minimum-idle: 5
+      max-lifetime: 1800000 # 30 minutos
+      connection-timeout: 30000
+
   jpa:
+    check-template-location: false
+    properties:
+      hibernate:
+        # DESATIVA o Prepared Statement Caching (Resolve o erro "S_1 already exists")
+        dbcp:
+          ps:
+            maxActive: 0
+            maxIdle: 0
+            maxWait: -1
+
     database: POSTGRESQL
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+
     hibernate:
       ddl-auto: update
     show-sql: true
