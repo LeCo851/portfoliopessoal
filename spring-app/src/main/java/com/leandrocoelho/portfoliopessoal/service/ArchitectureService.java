@@ -22,8 +22,8 @@ public class ArchitectureService {
     }
 
     @Transactional
-    public String generateDiagramForProject(Long projectId) {
-        ProjectAnalysisEntity projectAnalysisEntity = projectAnalysisRepository.findById(String.valueOf(projectId))
+    public String generateDiagramForProject(String projectId) {
+        ProjectAnalysisEntity projectAnalysisEntity = projectAnalysisRepository.findById(projectId)
                 .orElseThrow(() -> new RuntimeException("Projeto não encontrado" + projectId));
 
         if (projectAnalysisEntity.getArchitectureDiagram() != null && !projectAnalysisEntity.getArchitectureDiagram().isBlank()) {
@@ -34,16 +34,23 @@ public class ArchitectureService {
         log.info("Gerando novo diagrama via IA para: {}", projectAnalysisEntity.getTitulo());
 
         String prompt = """
-                Tarefa: Gere um código MERMAID.JS (tipo 'graph TD') para este projeto.
+                Tarefa: Gere um código MERMAID.JS do tipo FLUXOGRAMA ('graph TD') para representar a arquitetura deste projeto SEM INVENTAR, SE NÃO SOUBER NÃO FAÇA.
                 
                 PROJETO: %s
                 DESCRIÇÃO: %s
                 TECNOLOGIAS: %s
                 
-                REGRAS:
-                1. Retorne APENAS o código puro. Nada de markdown (```).
-                2. Use nós coloridos (style) para ficar bonito.
-                3. Se for Java, use nós retangulares. Se for DB, use cilindros [("DB")].
+                REGRAS CRÍTICAS DE SINTAXE (SIGA RIGOROSAMENTE):
+                1. Comece SEMPRE com: graph TD
+                2. Use APENAS a sintaxe de nós: A[Nome] --> B[Nome]
+                3. NÃO use 'participant', 'actor' ou 'sequenceDiagram'.
+                4. NÃO use 'shape=' dentro do comando 'style'.
+                5. Para agrupar, use 'subgraph NomeDoGrupo ... end'.
+                6. Para banco de dados, use: id[(NomeDoBanco)]
+                7. Para setas com texto, use: A -->|Texto| B
+                8. IDs dos nós devem ser simples (apenas letras/numeros). Ex: Node1, ServiceA.
+                9. RÓTULOS DOS NÓS: Evite parênteses () ou colchetes [] dentro do texto. Se precisar, use aspas: A["Service Registry (Eureka)"]
+                10. Retorne APENAS o código. Sem markdown (```).
                 """.formatted(projectAnalysisEntity.getTitulo(), projectAnalysisEntity.getResumo(), projectAnalysisEntity.getTags());
 
         String response = chatClient.prompt()

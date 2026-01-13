@@ -3,20 +3,22 @@ package com.leandrocoelho.portfoliopessoal.controller;
 import com.leandrocoelho.portfoliopessoal.service.ArchitectureService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/architecture")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class ArchitectureController {
 
     private final ArchitectureService architectureService;
 
-    @GetMapping("/{projetcId}")
-    public ResponseEntity getProjectArchitecture(@PathVariable Long projetcId){
-        return ResponseEntity.ok(architectureService.generateDiagramForProject(projetcId));
+    @GetMapping("/{projectId}")
+    public ResponseEntity<Map<String, String>> getProjectArchitecture(@PathVariable String projectId){
+        String diagram = architectureService.generateDiagramForProject(projectId);
+        // Retorna um JSON explícito para facilitar o frontend
+        return ResponseEntity.ok(Map.of("mermaidCode", diagram));
     }
 }

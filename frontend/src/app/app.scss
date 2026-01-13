@@ -10,7 +10,6 @@ $font-hud: 'Segoe UI', 'Roboto', sans-serif; // Interface Limpa
 $font-digital: 'Courier New', monospace;     // Dados/Display
 
 // --- DEFINIÇÃO DOS MODOS RGB (CSS Variables) ---
-// Aplicado ao wrapper principal para afetar tudo dentro
 .main-wrapper {
   width: 100%;
   min-height: 100vh;
@@ -18,10 +17,7 @@ $font-digital: 'Courier New', monospace;     // Dados/Display
 
   // Default (Rainbow)
   --rgb-gradient: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
-  --accent-color: #00ff00; // Cor principal (ex: status dot)
-
-  // Variável específica para o SVG Trace
-  // Por padrão usa o gradiente definido no HTML
+  --accent-color: #00ff00;
   --trace-stroke: url(#led-gradient);
 
   &.rainbow {
@@ -29,91 +25,74 @@ $font-digital: 'Courier New', monospace;     // Dados/Display
     --accent-color: #00ff00;
     --trace-stroke: url(#led-gradient);
   }
-
   &.cyberpunk {
     --rgb-gradient: linear-gradient(45deg, #ff0055, #00f3ff, #ff0055, #00f3ff);
     --accent-color: #00f3ff;
-    --trace-stroke: #00f3ff; // Cor sólida para SVG
+    --trace-stroke: #00f3ff;
   }
-
   &.red {
     --rgb-gradient: linear-gradient(45deg, #ff0000, #550000, #ff0000, #550000);
     --accent-color: #ff0000;
-    --trace-stroke: #ff0000; // Cor sólida para SVG
+    --trace-stroke: #ff0000;
   }
-
   &.stealth {
-    --rgb-gradient: linear-gradient(45deg, #333, #555, #333, #555); // Apenas cinza
+    --rgb-gradient: linear-gradient(45deg, #333, #555, #333, #555);
     --accent-color: #ffffff;
-    --trace-stroke: #333; // Cor sólida para SVG
+    --trace-stroke: #333;
   }
 }
 
-// --- Animação RGB Chroma (Rainbow Wave) ---
 @keyframes rgb-wave {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 
-// Mixin para Borda RGB
 @mixin rgb-border {
   position: relative;
   &::before {
     content: '';
     position: absolute;
-    inset: -1px; // Borda externa
+    inset: -1px;
     z-index: -1;
-    background: var(--rgb-gradient); // Usa a variável dinâmica
+    background: var(--rgb-gradient);
     background-size: 400%;
     animation: rgb-wave 20s linear infinite;
     border-radius: inherit;
     opacity: 0;
     transition: opacity 0.3s ease;
   }
-  &:hover::before {
-    opacity: 1;
-  }
+  &:hover::before { opacity: 1; }
 }
 
-// --- Fundo "Mesh Frontal" (Gabinete Perfurado) ---
 .background-grid {
   position: fixed;
   top: 0; left: 0; width: 100vw; height: 100vh;
-  z-index: -2; // Atrás do SVG
+  z-index: -2;
   background-color: $bg-dark;
-
-  // Padrão de furos hexagonais/circulares
   background-image: radial-gradient(#1a1a1a 15%, transparent 16%), radial-gradient(#1a1a1a 15%, transparent 16%);
   background-size: 20px 20px;
   background-position: 0 0, 10px 10px;
-
-  // Vignette escura para foco
   mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
 }
 
-// --- LED Traces (SVG Background) ---
 .led-traces {
   position: fixed;
   top: 0; left: 0; width: 100vw; height: 100vh;
-  z-index: -1; // Entre o fundo e o conteúdo
+  z-index: -1;
   pointer-events: none;
-  opacity: 0.8; // Mais visível
+  opacity: 0.8;
 
   .trace {
     fill: none;
-    stroke-width: 4; // Mais grosso (padrão)
+    stroke-width: 4;
     stroke-linecap: round;
-    stroke-dasharray: 200 2000; // Pulso curto (200px), intervalo longo (2000px)
+    stroke-dasharray: 200 2000;
     stroke-dashoffset: 2000;
     animation: trace-anim 8s linear infinite;
-    filter: url(#glow); // Brilho Neon
-
-    // Usa a variável definida no .main-wrapper
+    filter: url(#glow);
     stroke: var(--trace-stroke);
   }
-
-  // Variações Aleatórias (Espessura, Velocidade, Delay, Opacidade)
   .trace-1 { stroke-width: 5; animation-duration: 5s; animation-delay: 0s; opacity: 1; }
   .trace-2 { stroke-width: 3; animation-duration: 8s; animation-delay: 2s; opacity: 0.7; }
   .trace-3 { stroke-width: 6; animation-duration: 12s; animation-delay: 1s; opacity: 0.9; }
@@ -123,23 +102,17 @@ $font-digital: 'Courier New', monospace;     // Dados/Display
   .trace-7 { stroke-width: 3; animation-duration: 4s; animation-delay: 4s; opacity: 0.6; }
 }
 
-// Animação do traço percorrendo o caminho
-@keyframes trace-anim {
-  to {
-    stroke-dashoffset: -2000; // Move para o outro lado
-  }
-}
+@keyframes trace-anim { to { stroke-dashoffset: -2000; } }
 
 .container {
   max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
   font-family: $font-hud;
-  position: relative; // Garante z-index correto
+  position: relative;
   z-index: 1;
 }
 
-// --- Header "Water Cooler Display" ---
 .dashboard-header {
   display: flex;
   justify-content: space-between;
@@ -147,19 +120,18 @@ $font-digital: 'Courier New', monospace;     // Dados/Display
   margin-bottom: 4rem;
   padding: 1.5rem;
   background: $glass-bg;
-  backdrop-filter: blur(12px); // Efeito Vidro
+  backdrop-filter: blur(12px);
   border: 1px solid $border-glass;
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.5);
   position: relative;
   overflow: hidden;
 
-  // Linha RGB inferior
   &::after {
     content: '';
     position: absolute;
     bottom: 0; left: 0; width: 100%; height: 2px;
-    background: var(--rgb-gradient); // Dinâmico
+    background: var(--rgb-gradient);
     background-size: 200% 200%;
     animation: rgb-wave 5s linear infinite;
   }
@@ -171,25 +143,11 @@ $font-digital: 'Courier New', monospace;     // Dados/Display
 
     .symbol {
       font-size: 2.5rem;
-      // Efeito metálico no ícone
-      background: linear-gradient(135deg, #fff 0%, #888 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 0 5px rgba(255,255,255,0.3));
-
-      // ADICIONADO: Cor dinâmica baseada no tema
       color: var(--accent-color);
       text-shadow: 0 0 10px var(--accent-color);
-      // Remove o background-clip para que a cor funcione
-      background: none;
-      -webkit-text-fill-color: initial;
     }
 
-    .text {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem; // Espaço entre título e subtítulo
-    }
+    .text { display: flex; flex-direction: column; gap: 0.5rem; }
 
     h1 {
       margin: 0;
@@ -207,17 +165,12 @@ $font-digital: 'Courier New', monospace;     // Dados/Display
       font-size: 0.8rem;
       letter-spacing: 2px;
       text-transform: uppercase;
-      margin-top: 4px; // Adicionado margem extra para separar do título
+      margin-top: 4px;
     }
   }
 
-  .header-controls {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
+  .header-controls { display: flex; align-items: center; gap: 1rem; }
 
-  // Botão Controlador RGB
   .rgb-control-btn {
     background: rgba(0,0,0,0.5);
     border: 1px solid $border-glass;
@@ -238,17 +191,13 @@ $font-digital: 'Courier New', monospace;     // Dados/Display
       color: var(--accent-color);
       box-shadow: 0 0 10px var(--accent-color);
     }
-
-    .mode-label {
-      font-size: 0.8rem;
-      font-weight: bold;
-    }
+    .mode-label { font-size: 0.8rem; font-weight: bold; }
   }
 
   .status-badge {
     font-family: $font-digital;
     font-size: 0.9rem;
-    color: var(--accent-color); // Dinâmico
+    color: var(--accent-color);
     background: rgba(0, 0, 0, 0.3);
     padding: 8px 16px;
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -260,7 +209,7 @@ $font-digital: 'Courier New', monospace;     // Dados/Display
 
     .dot {
       width: 6px; height: 6px;
-      background: var(--accent-color); // Dinâmico
+      background: var(--accent-color);
       border-radius: 50%;
       box-shadow: 0 0 8px var(--accent-color);
       animation: pulse 2s infinite;
@@ -268,7 +217,6 @@ $font-digital: 'Courier New', monospace;     // Dados/Display
   }
 }
 
-// --- Seção Sobre Mim (Painel Lateral) ---
 .about-section {
   margin-bottom: 4rem;
   background: $glass-bg;
@@ -278,7 +226,6 @@ $font-digital: 'Courier New', monospace;     // Dados/Display
   padding: 2rem;
   position: relative;
 
-  // Detalhe "Parafuso" nos cantos
   &::before, &::after {
     content: '+';
     position: absolute;
@@ -288,130 +235,69 @@ $font-digital: 'Courier New', monospace;     // Dados/Display
   &::before { top: 10px; left: 10px; }
   &::after { bottom: 10px; right: 10px; }
 
-  // Layout Flex para Foto + Texto
   .about-container {
     display: flex;
     gap: 2rem;
     align-items: center;
-
-    @media (max-width: 768px) {
-      flex-direction: column;
-      text-align: center;
-    }
+    @media (max-width: 768px) { flex-direction: column; text-align: center; }
   }
 
-  // Estilo da Moldura da Foto
   .profile-photo-container {
     flex-shrink: 0;
-
     .photo-frame {
-      width: 180px;
-      height: 180px;
-      border-radius: 50%; // Circular
+      width: 180px; height: 180px;
+      border-radius: 50%;
       background: rgba(0,0,0,0.3);
       border: 2px solid $border-glass;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
       box-shadow: 0 0 20px rgba(0,0,0,0.5);
 
-      // Borda RGB Animada
       &::after {
-        content: '';
-        position: absolute;
-        inset: -2px;
-        border-radius: 50%;
-        padding: 2px;
+        content: ''; position: absolute; inset: -2px;
+        border-radius: 50%; padding: 2px;
         background: var(--rgb-gradient);
         -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-        -webkit-mask-composite: xor;
-        mask-composite: exclude;
+        -webkit-mask-composite: xor; mask-composite: exclude;
         animation: spin 4s linear infinite;
       }
-
-      // Placeholder Icon
-      .placeholder-icon {
-        font-size: 4rem;
-        color: var(--accent-color);
-        opacity: 0.5;
-      }
-
-      // Se tiver imagem real (img tag)
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
+      .placeholder-icon { font-size: 4rem; color: var(--accent-color); opacity: 0.5; }
+      img { width: 100%; height: 100%; object-fit: cover; }
     }
   }
 
   .about-content {
     flex: 1;
-
     h2 {
-      font-size: 1.8rem;
-      color: $text-main;
-      margin-bottom: 1rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      border-left: 4px solid #fff;
-      padding-left: 1rem;
+      font-size: 1.8rem; color: $text-main; margin-bottom: 1rem;
+      font-weight: 700; text-transform: uppercase;
+      border-left: 4px solid #fff; padding-left: 1rem;
     }
-
-    p {
-      color: $text-dim;
-      font-size: 1.1rem;
-      line-height: 1.7;
-      margin-bottom: 2rem;
-      max-width: 800px;
-    }
+    p { color: $text-dim; font-size: 1.1rem; line-height: 1.7; margin-bottom: 2rem; max-width: 800px; }
 
     .contact-links {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-
-      @media (max-width: 768px) {
-        justify-content: center;
-      }
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      @media (max-width: 768px) { justify-content: center; }
 
       .contact-item {
-        display: flex;
-        align-items: center;
-        gap: 0.8rem;
-        color: $text-main;
-        text-decoration: none;
-        font-family: $font-hud;
-        font-size: 0.9rem;
-        padding: 12px 24px;
-        background: #1a1a1a; // Tecla escura
-        border: 1px solid #333;
-        border-radius: 6px; // Levemente arredondado (Keycap)
-        transition: all 0.2s ease;
-        font-weight: 600;
-        text-transform: uppercase;
-        position: relative;
-        overflow: hidden;
-
-        // Efeito RGB no Hover
+        display: flex; align-items: center; gap: 0.8rem;
+        color: $text-main; text-decoration: none;
+        font-family: $font-hud; font-size: 0.9rem;
+        padding: 12px 24px; background: #1a1a1a;
+        border: 1px solid #333; border-radius: 6px;
+        transition: all 0.2s ease; font-weight: 600;
+        text-transform: uppercase; position: relative; overflow: hidden;
         &:hover {
-          transform: translateY(-2px);
-          border-color: transparent;
-          color: #fff;
-          box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+          transform: translateY(-2px); border-color: transparent;
+          color: #fff; box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
           background: #252525;
         }
-
-        // Borda RGB oculta que aparece no hover (via background-origin trick ou pseudo-element)
         @include rgb-border;
       }
     }
   }
 }
 
-// --- Grid de Projetos ---
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
@@ -419,158 +305,168 @@ $font-digital: 'Courier New', monospace;     // Dados/Display
   align-items: start;
 }
 
-// --- Card "Vidro Temperado" ---
 .card {
-  background: rgba(15, 15, 20, 0.6); // Mais transparente
+  background: rgba(15, 15, 20, 0.6);
   backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
   padding: 0;
   transition: all 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  position: relative;
-  overflow: hidden;
+  display: flex; flex-direction: column; height: 100%;
+  position: relative; overflow: hidden;
 
-  // Reflexo do vidro
   &::before {
-    content: '';
-    position: absolute;
-    top: 0; left: -100%; width: 50%; height: 100%;
+    content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
     background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
-    transform: skewX(-25deg);
-    transition: 0.5s;
-    pointer-events: none;
+    transform: skewX(-25deg); transition: 0.5s; pointer-events: none;
   }
 
   &:hover {
     transform: translateY(-5px);
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
     border-color: rgba(255, 255, 255, 0.2);
-
-    &::before {
-      left: 150%;
-    }
-
-    // RGB Glow na parte inferior
+    &::before { left: 150%; }
     &::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0; width: 100%; height: 3px;
-      background: var(--rgb-gradient); // Dinâmico
-      background-size: 200%;
+      content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px;
+      background: var(--rgb-gradient); background-size: 200%;
       animation: rgb-wave 3s linear infinite;
     }
   }
 
   .content {
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+    padding: 1.5rem; display: flex; flex-direction: column; height: 100%; gap: 1rem;
 
     .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 1rem;
-
+      display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0;
       h2 {
-        font-size: 1.3rem;
-        margin: 0;
-        font-weight: 700;
-        line-height: 1.3;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-
-        .project-title-link {
-          color: $text-main;
-          text-decoration: none;
-          transition: color 0.2s;
-        }
+        font-size: 1.3rem; margin: 0; font-weight: 700; line-height: 1.3;
+        text-transform: uppercase; letter-spacing: 0.5px;
+        .project-title-link { color: $text-main; text-decoration: none; transition: color 0.2s; }
       }
-
       .git-icon {
-        color: $text-dim;
-        text-decoration: none;
-        font-size: 1.2rem;
-        transition: all 0.2s;
-        &:hover {
-          color: #fff;
-          text-shadow: 0 0 8px rgba(255,255,255,0.5);
-        }
+        color: $text-dim; text-decoration: none; font-size: 1.2rem; transition: all 0.2s;
+        &:hover { color: #fff; text-shadow: 0 0 8px rgba(255,255,255,0.5); }
       }
     }
 
-    .description {
-      color: $text-dim;
-      font-size: 1rem;
-      line-height: 1.6;
-      margin-bottom: 1.5rem;
-      flex-grow: 1;
-    }
+    .description { color: $text-dim; font-size: 1rem; line-height: 1.6; margin-bottom: 0; flex-grow: 1; }
 
     .specs {
+      margin-bottom: 0.5rem;
       .label { display: none; }
-
       .tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-
+        display: flex; flex-wrap: wrap; gap: 8px;
         .tag {
-          font-family: $font-digital;
-          font-size: 0.7rem;
-          padding: 4px 10px;
-          border-radius: 4px;
-          font-weight: 600;
-          letter-spacing: 1px;
-          text-transform: uppercase;
-          border: 1px solid transparent;
+          font-family: $font-digital; font-size: 0.7rem; padding: 4px 10px;
+          border-radius: 4px; font-weight: 600; letter-spacing: 1px;
+          text-transform: uppercase; border: 1px solid transparent;
+          background: rgba(255, 255, 255, 0.05); color: $text-dim; border-color: rgba(255, 255, 255, 0.1);
+          &.backend { color: #ffaa00; background: rgba(255, 170, 0, 0.1); border-color: rgba(255, 170, 0, 0.3); box-shadow: 0 0 5px rgba(255, 170, 0, 0.1); }
+          &.data { color: #00d9ff; background: rgba(0, 217, 255, 0.1); border-color: rgba(0, 217, 255, 0.3); box-shadow: 0 0 5px rgba(0, 217, 255, 0.1); }
+        }
+      }
+    }
 
-          // Default (Cinza)
-          background: rgba(255, 255, 255, 0.05);
-          color: $text-dim;
-          border-color: rgba(255, 255, 255, 0.1);
+    .arch-btn {
+      margin-top: auto; width: 100%; padding: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: $text-dim; font-family: $font-digital;
+      text-transform: uppercase; font-weight: bold;
+      cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      border-radius: 6px;
 
-          // Backend (Laranja/Cobre - Heatpipes)
-          &.backend {
-            color: #ffaa00;
-            background: rgba(255, 170, 0, 0.1);
-            border-color: rgba(255, 170, 0, 0.3);
-            box-shadow: 0 0 5px rgba(255, 170, 0, 0.1);
-          }
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--accent-color); border-color: var(--accent-color);
+        box-shadow: 0 0 15px var(--accent-color);
+        text-shadow: 0 0 5px var(--accent-color);
+      }
+    }
+  }
+}
 
-          // Data (Azul - Coolant)
-          &.data {
-            color: #00d9ff;
-            background: rgba(0, 217, 255, 0.1);
-            border-color: rgba(0, 217, 255, 0.3);
-            box-shadow: 0 0 5px rgba(0, 217, 255, 0.1);
-          }
+// --- MODAL DE ARQUITETURA ---
+.modal-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 10000;
+  display: flex; align-items: center; justify-content: center;
+  animation: fadeIn 0.3s ease;
+
+  .modal-content {
+    width: 90%; max-width: 1000px; height: 80vh;
+    background: rgba(10, 10, 15, 0.95);
+    border: 1px solid var(--accent-color);
+    box-shadow: 0 0 30px var(--accent-color);
+    display: flex; flex-direction: column;
+    position: relative;
+    animation: scaleIn 0.3s ease;
+
+    &::after {
+      content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
+      background: var(--accent-color); opacity: 0.5;
+      animation: scan 3s linear infinite; pointer-events: none;
+    }
+
+    .modal-header {
+      padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1);
+      display: flex; justify-content: space-between; align-items: center;
+      background: rgba(255,255,255,0.05);
+
+      h3 {
+        margin: 0; color: var(--accent-color); font-family: $font-digital;
+        text-transform: uppercase; letter-spacing: 1px;
+        display: flex; align-items: center; gap: 10px;
+      }
+
+      .close-btn {
+        background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer;
+        &:hover { color: #ff0000; text-shadow: 0 0 10px #ff0000; }
+      }
+    }
+
+    .modal-body {
+      flex: 1; overflow: hidden; padding: 1rem; position: relative;
+      background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
+      background-size: 20px 20px;
+
+      .loading-diagram {
+        position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        color: var(--accent-color); font-family: $font-digital; font-size: 1.2rem;
+        display: flex; flex-direction: column; align-items: center; gap: 1rem;
+      }
+
+      .mermaid-wrapper {
+        width: 100%; height: 100%; overflow: auto;
+        display: flex; justify-content: center; align-items: center;
+
+        // ESTILIZAÇÃO DO SVG MERMAID
+        .mermaid {
+          width: 100%;
+          display: flex; justify-content: center;
+        }
+
+        ::ng-deep svg {
+          max-width: 100% !important;
+          height: auto !important;
+          font-family: $font-digital !important;
         }
       }
     }
   }
 }
 
-// --- Animações ---
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes scaleIn { from { transform: scale(0.9); } to { transform: scale(1); } }
+@keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+@keyframes spin { 100% { transform: rotate(360deg); } }
 .cursor { animation: blink 1s step-end infinite; }
 @keyframes blink { 50% { opacity: 0; } }
-@keyframes pulse {
-  0% { opacity: 1; }
-  50% { opacity: 0.5; }
-  100% { opacity: 1; }
-}
-@keyframes spin { 100% { transform: rotate(360deg); } }
+@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
-// Responsivo
 @media (max-width: 768px) {
-  .dashboard-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-    .status-badge { align-self: flex-start; }
-  }
+  .dashboard-header { flex-direction: column; align-items: flex-start; gap: 1rem; .status-badge { align-self: flex-start; } }
 }
