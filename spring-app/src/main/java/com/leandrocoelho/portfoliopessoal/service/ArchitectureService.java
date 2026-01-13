@@ -34,23 +34,51 @@ public class ArchitectureService {
         log.info("Gerando novo diagrama via IA para: {}", projectAnalysisEntity.getTitulo());
 
         String prompt = """
-                Tarefa: Gere um código MERMAID.JS do tipo FLUXOGRAMA ('graph TD') para representar a arquitetura deste projeto SEM INVENTAR, SE NÃO SOUBER NÃO FAÇA.
-                
-                PROJETO: %s
-                DESCRIÇÃO: %s
-                TECNOLOGIAS: %s
-                
-                REGRAS CRÍTICAS DE SINTAXE (SIGA RIGOROSAMENTE):
-                1. Comece SEMPRE com: graph TD
-                2. Use APENAS a sintaxe de nós: A[Nome] --> B[Nome]
-                3. NÃO use 'participant', 'actor' ou 'sequenceDiagram'.
-                4. NÃO use 'shape=' dentro do comando 'style'.
-                5. Para agrupar, use 'subgraph NomeDoGrupo ... end'.
-                6. Para banco de dados, use: id[(NomeDoBanco)]
-                7. Para setas com texto, use: A -->|Texto| B
-                8. IDs dos nós devem ser simples (apenas letras/numeros). Ex: Node1, ServiceA.
-                9. RÓTULOS DOS NÓS: Evite parênteses () ou colchetes [] dentro do texto. Se precisar, use aspas: A["Service Registry (Eureka)"]
-                10. Retorne APENAS o código. Sem markdown (```).
+                    Atue como um Arquiteto de Software Sênior.
+                    Tarefa: Gere um código MERMAID.JS (tipo 'graph TD') EXATAMENTE baseado nas informações fornecidas.
+                    
+                    INPUT DO PROJETO:
+                    - NOME: %s
+                    - DESCRIÇÃO: %s
+                    - TECNOLOGIAS REAIS: %s
+                    
+                    🚫 REGRAS ANTI-ALUCINAÇÃO:
+                    1. FONTE DA VERDADE: Use APENAS tecnologias listadas no input.
+                    2. Se não está na lista, NÃO EXISTE.
+                    
+                    🛡️ PROTOCOLO DE SEGURANÇA DE SINTAXE (ZERO ERRO):
+                    1. ESTRUTURA ESPACIAL: use 'subgraph'. agrupe nós. Faça um fluxo simples.
+                    2. IDs ABSTRATOS: Use APENAS 'N1', 'N2', 'N3', etc. para os IDs dos nós.
+                       ERRADO: Java[Java] --> Spring[Spring]
+                       CERTO:  N1["Java"] --> N2["Spring"]
+                    3. RÓTULOS SEGUROS: Sempre use aspas duplas simples nos rótulos. Adicione emojis neles.
+                       Ex: N1["⚙️ Java 17"]
+                  
+                    
+                    🎨 ESTILO VISUAL (Aplique no final):
+                    1. Defina classes:
+                       classDef frontend fill:#0d1117,stroke:#00dfff,stroke-width:2px,color:#fff;
+                       classDef backend fill:#0d1117,stroke:#ff0055,stroke-width:2px,color:#fff;
+                       classDef data fill:#0d1117,stroke:#ffee00,stroke-width:2px,color:#fff;
+                       classDef infra fill:#0d1117,stroke:#bd93f9,stroke-width:2px,color:#fff;
+                    2. Aplique as classes aos IDs abstratos. Ex: class N1 backend
+                    
+                    EXEMPLO DE SAÍDA PERFEITA:
+                    graph TD
+                    N1["👤 Usuário"] --> N2["💻 Angular"]
+                    N2 --> N3["⚙️ Spring Boot"]
+                    N3 --> N4["💾 PostgreSQL"]
+                    classDef frontend fill:#0d1117,stroke:#00dfff,stroke-width:2px,color:#fff;
+                    classDef backend fill:#0d1117,stroke:#ff0055,stroke-width:2px,color:#fff;
+                    classDef data fill:#0d1117,stroke:#ffee00,stroke-width:2px,color:#fff;
+                    class N2 frontend
+                    class N3 backend
+                    class N4 data
+                    
+                    REGRAS DE SINTAXE (CRÍTICO):
+                                    1. Retorne APENAS o código.
+                                    2. NUNCA use aspas duplas duplicadas (`""texto""`). Use apenas uma (`"texto"`).
+                                    3. Certifique-se de fechar cada `subgraph` com a palavra `end`.
                 """.formatted(projectAnalysisEntity.getTitulo(), projectAnalysisEntity.getResumo(), projectAnalysisEntity.getTags());
 
         String response = chatClient.prompt()

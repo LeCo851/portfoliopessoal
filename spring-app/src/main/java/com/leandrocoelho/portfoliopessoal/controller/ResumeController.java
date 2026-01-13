@@ -1,6 +1,8 @@
 package com.leandrocoelho.portfoliopessoal.controller;
 
 import com.leandrocoelho.portfoliopessoal.service.PdfService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -14,10 +16,12 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api/resume")
 @RequiredArgsConstructor
+@Tag(name = "Currículo", description = "Endpoint para gestão e download do currículo")
 public class ResumeController {
     private final PdfService pdfService;
 
     @GetMapping
+    @Operation(summary = "Baixar currículo em PDF", description = "Converte o Markdown interno em um PDF estilizado e retorna o arquivo para download.")
     public ResponseEntity<byte[]> downloadResume(){
 
         try {

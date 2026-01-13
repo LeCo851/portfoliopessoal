@@ -18,6 +18,9 @@ $font-digital: 'Courier New', monospace;     // Dados/Display
   // Default (Rainbow)
   --rgb-gradient: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
   --accent-color: #00ff00;
+
+  // Variável específica para o SVG Trace
+  // Por padrão usa o gradiente definido no HTML
   --trace-stroke: url(#led-gradient);
 
   &.rainbow {
@@ -397,7 +400,7 @@ $font-digital: 'Courier New', monospace;     // Dados/Display
   animation: fadeIn 0.3s ease;
 
   .modal-content {
-    width: 90%; max-width: 1000px; height: 80vh;
+    width: 95%; max-width: 1400px; height: 90vh;
     background: rgba(10, 10, 15, 0.95);
     border: 1px solid var(--accent-color);
     box-shadow: 0 0 30px var(--accent-color);
@@ -429,7 +432,8 @@ $font-digital: 'Courier New', monospace;     // Dados/Display
     }
 
     .modal-body {
-      flex: 1; overflow: hidden; padding: 1rem; position: relative;
+      flex: 1; overflow: hidden; padding: 0;
+      position: relative;
       background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
       background-size: 20px 20px;
 
@@ -440,19 +444,52 @@ $font-digital: 'Courier New', monospace;     // Dados/Display
       }
 
       .mermaid-wrapper {
-        width: 100%; height: 100%; overflow: auto;
+        width: 100%; height: 100%;
         display: flex; justify-content: center; align-items: center;
+        overflow: hidden;
 
-        // ESTILIZAÇÃO DO SVG MERMAID
+        // ESTILIZAÇÃO DO SVG MERMAID (OVERRIDE)
         .mermaid {
-          width: 100%;
-          display: flex; justify-content: center;
+          width: 100%; height: 100%;
+          display: flex; justify-content: center; align-items: center;
         }
 
         ::ng-deep svg {
-          max-width: 100% !important;
-          height: auto !important;
+          width: 100% !important;
+          height: 100% !important;
+          max-width: none !important;
           font-family: $font-digital !important;
+
+          // Força cores do tema
+          .node rect, .node circle, .node polygon, .node path {
+            fill: rgba(255,255,255,0.05) !important;
+            stroke: var(--accent-color) !important;
+            stroke-width: 2px !important;
+          }
+
+          .node .label {
+            color: #fff !important;
+            fill: #fff !important;
+          }
+
+          .edgePath .path {
+            stroke: var(--accent-color) !important;
+            stroke-width: 2px !important;
+          }
+
+          .edgeLabel {
+            background-color: #000 !important;
+            color: var(--accent-color) !important;
+          }
+
+          .cluster rect {
+            fill: rgba(255,255,255,0.02) !important;
+            stroke: rgba(255,255,255,0.2) !important;
+          }
+
+          .cluster .label {
+             fill: #aaa !important;
+          }
         }
       }
     }

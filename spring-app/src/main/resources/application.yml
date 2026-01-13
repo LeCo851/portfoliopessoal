@@ -15,7 +15,7 @@ spring:
       base-url: https://api.groq.com/openai # URL mágica que faz o Spring falar com a Groq
       chat:
         options:
-          model: meta-llama/llama-4-scout-17b-16e-instruct #llama-3.3-70b-versatile # Ou 'mixtral-8x7b-32768'
+          model: llama-3.3-70b-versatile #meta-llama/llama-4-scout-17b-16e-instruct #llama-3.3-70b-versatile # Ou 'mixtral-8x7b-32768'
           temperature: 0.1
 
   # Cache (Essencial para não gastar API do GitHub/Groq a cada F5)
@@ -35,9 +35,18 @@ spring:
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
-    jpa:
-      database: POSTGRESQL
-      database-platform: org.hibernate.dialect.PostgreSQLDialect
-      hibernate:
-        ddl-auto: update
-      show-sql: true
+  jpa:
+    database: POSTGRESQL
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+management:
+    endpoints:
+      web:
+        exposure:
+          include: health, info, metrics
+    endpoint:
+      health:
+        show-details: always

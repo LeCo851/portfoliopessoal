@@ -3,7 +3,8 @@
   <div class="background-grid"></div>
 
   <!-- Efeito LED RGB Traces (Circuito de Fundo) -->
-  <svg class="led-traces" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+  <!-- ViewBox define o sistema de coordenadas (0 0 até 1920 1080) -->
+  <svg class="led-traces" width="100%" height="100%" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <linearGradient id="led-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
         <stop offset="0%" stop-color="#ff0000" />
@@ -21,13 +22,15 @@
         </feMerge>
       </filter>
     </defs>
+
+    <!-- Caminhos com coordenadas absolutas baseadas no viewBox 1920x1080 -->
     <path class="trace trace-1" d="M -50,100 L 300,100 L 350,50 L 600,50" />
-    <path class="trace trace-2" d="M 95%,100% L 95%,600 L 90%,550 L 90%,0" />
+    <path class="trace trace-2" d="M 1800,1080 L 1800,600 L 1750,550 L 1750,0" />
     <path class="trace trace-3" d="M 0,500 L 200,500 L 300,600 L 800,600 L 900,700 L 1200,700" />
     <path class="trace trace-4" d="M 50,0 L 50,300 L 100,350 L 100,800" />
-    <path class="trace trace-5" d="M 20%,0 L 20%,200 L 60%,600 L 60%,100%" />
-    <path class="trace trace-6" d="M 100%,90% L 70%,90% L 60%,80% L 10%,80% L 0,70%" />
-    <path class="trace trace-7" d="M 60%,0 L 60%,100 L 90%,100 L 100%,200" />
+    <path class="trace trace-5" d="M 400,0 L 400,200 L 1200,600 L 1200,1080" />
+    <path class="trace trace-6" d="M 1920,900 L 1400,900 L 1300,800 L 200,800 L 0,700" />
+    <path class="trace trace-7" d="M 1200,0 L 1200,100 L 1500,100 L 1600,200" />
   </svg>
 
   <div class="container">

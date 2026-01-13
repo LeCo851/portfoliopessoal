@@ -8,10 +8,12 @@ Este é um projeto Full Stack que automatiza a exibição de um portfólio técn
 - **Java 21**: Versão mais recente com foco em performance.
 - **Spring Boot 3.5.x**: Framework base para a API REST.
 - **Spring JPA**: Persistência de dados.
-- **Spring AI**: Integração com OpenAI para análise inteligente dos READMEs.
+- **Spring AI**: Integração com OpenAI (via Groq) para análise inteligente dos READMEs e Chatbot.
 - **Spring Cache**: Otimização de chamadas à API do GitHub.
 - **Lombok**: Redução de código boilerplate.
 - **RestClient**: Cliente HTTP moderno do Spring para consumo de APIs externas.
+- **Swagger (OpenAPI)**: Documentação interativa da API.
+- **iText / PDFBox**: Geração dinâmica de currículos em PDF.
 
 ### Frontend (Angular)
 - **Angular 21+**: Framework moderno para a interface.
@@ -19,11 +21,12 @@ Este é um projeto Full Stack que automatiza a exibição de um portfólio técn
 - **SCSS**: Estilização avançada e modular.
 - **TypeScript**: Tipagem forte para maior segurança no desenvolvimento.
 - **Angular Material**: Componentes de UI modernos e acessíveis.
+- **Mermaid.js**: Renderização de diagramas de arquitetura gerados por IA.
 
 ### Infraestrutura
 - **Docker & Docker Compose**: Orquestração de containers.
 - **GitHub API**: Fonte de dados dos projetos.
-- **PostgresSQL**: Base de dados com a cópia dos resumos gerados por IA (SUPABASE)
+- **PostgresSQL**: Base de dados com a cópia dos resumos gerados por IA (SUPABASE).
 
 ## 🏗️ Arquitetura do Projeto
 
@@ -32,13 +35,16 @@ O projeto é dividido em dois módulos principais:
 1.  **`spring-app/`**: API REST que faz o "trabalho pesado".
     - Busca repositórios no GitHub.
     - Lê o conteúdo do `README.md` de cada projeto.
-    - Envia os dados para a IA (OpenAI) gerar um título comercial, resumo técnico e identificar tecnologias.
-    - Expõe um endpoint `/api/projects` para o frontend.
+    - Envia os dados para a IA (Llama 3 via Groq) gerar um título comercial, resumo técnico e identificar tecnologias.
+    - **Arquiteto Virtual**: Gera diagramas Mermaid.js baseados no código dos projetos.
+    - **Gerador de PDF**: Cria currículos dinâmicos a partir de Markdown.
+    - **Swagger UI**: Documentação acessível em `/swagger-ui.html`.
     - Chatbot integrado com RAG (Retrieval-Augmented Generation) para responder perguntas sobre o currículo.
 
 2.  **`frontend/`**: Interface de usuário moderna e responsiva.
     - Consome a API Java.
     - Exibe os projetos em cards atrativos com tags e links diretos.
+    - **Visualização de Diagramas**: Renderiza diagramas de arquitetura com Mermaid.js.
     - Chat flutuante para interação com o assistente virtual.
 
 ## 🚀 Como Executar
@@ -47,12 +53,13 @@ O projeto é dividido em dois módulos principais:
 - JDK 21
 - Node.js & Angular CLI
 - Docker (opcional)
-- Uma chave de API do Grok (configurada no backend)
+- Chaves de API configuradas (Groq, GitHub Token, DB Password)
 
 ### Backend
 1. Navegue até `spring-app/`.
-2. Configure sua `OPENAI_API_KEY` no arquivo de propriedades ou variável de ambiente.
+2. Configure as variáveis de ambiente: `GROQ_API_KEY`, `GITHUB_TOKEN`, `DB_PASSWORD`.
 3. Execute: `./mvnw spring-boot:run`
+4. Acesse o Swagger: `http://localhost:8080/swagger-ui.html`
 
 ### Frontend
 1. Navegue até `frontend/`.
@@ -63,6 +70,7 @@ O projeto é dividido em dois módulos principais:
 ## 📝 Notas de Desenvolvimento
 - O backend utiliza o pacote `com.leandrocoelho.portfoliopessoal`.
 - A integração com a IA foi desenhada para atuar como um "Recrutador Técnico Sênior", garantindo que os resumos sejam profissionais e focados em valor de negócio.
+- O sistema utiliza Threads Virtuais do Java 21 para alta concorrência.
 
 ---
 Desenvolvido por [Leandro Coelho](https://github.com/LeCo851)

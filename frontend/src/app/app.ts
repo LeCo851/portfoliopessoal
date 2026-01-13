@@ -5,6 +5,7 @@ import { PortfolioService } from './portfolio';
 import { ProjectCard } from './project.interface';
 
 declare const mermaid: any;
+declare const svgPanZoom: any;
 
 @Component({
   selector: 'app-root',
@@ -29,6 +30,8 @@ export class AppComponent implements OnInit {
   selectedProject = signal<ProjectCard | null>(null);
   diagramCode = signal<string>('');
   isLoadingDiagram = signal<boolean>(false);
+
+  private panZoomInstance: any = null;
 
   cycleRgbMode() {
     const modes = ['rainbow', 'cyberpunk', 'red', 'stealth'];
@@ -74,7 +77,6 @@ export class AppComponent implements OnInit {
         else if (res && res.diagram) code = res.diagram;
 
         if (code) {
-          // Limpeza Robusta
           code = code
             .replace(/^"|"$/g, '')
             .replace(/\\n/g, '\n')
@@ -83,19 +85,26 @@ export class AppComponent implements OnInit {
             .replace(/&gt;/g, '>')
             .replace(/&lt;/g, '<')
             .replace(/,?\s*shape=[a-zA-Z0-9]+/g, '')
+            .replace(/\|([^|]+)\|\>/g, '|$1|')
             .replace(/\s*\|>\s*/g, ' --> ')
-            .replace(/\[([^\]]*?\(.*?\)[^\]]*?)\]/g, '["$1"]')
-            // Correções específicas para 'end' colado
+            // REMOVIDA A REGEX QUE ADICIONAVA ASPAS EM PARÊNTESES
+            // ADICIONADA REGEX PARA CORRIGIR ASPAS DUPLICADAS
+            .replace(/""/g, '"')
+
             .replace(/Composeend/gi, 'Compose\nend')
-            .replace(/endsubgraph/gi, 'end\nsubgraph') // Corrige 'endsubgraph'
+            .replace(/endsubgraph/gi, 'end\nsubgraph')
             .replace(/end\s*subgraph/gi, 'end\nsubgraph')
+            .replace(/([\])"\)])\s*end\s*$/gm, '$1\nend')
             .replace(/([a-z])end\s*$/gmi, (match, p1) => {
                if (p1 === 'k' || p1 === 't') return match;
                return p1 + '\nend';
             })
+            .replace(/^class\s+(.+?)\s+([a-zA-Z0-9_]+);?$/gm, (match, nodes, className) => {
+                const nodeList = nodes.split(',').map((n: string) => n.trim());
+                return nodeList.map((n: string) => `class ${n} ${className};`).join('\n');
+            })
             .trim();
 
-          // AUTO-CORREÇÃO DE TIPO DE DIAGRAMA
           if (code.includes('participant') || code.includes('actor')) {
             code = code.replace(/^graph\s+[A-Z]+\s*/i, '');
             if (!code.startsWith('sequenceDiagram')) {
@@ -133,12 +142,21 @@ export class AppComponent implements OnInit {
 
   closeModal() {
     this.selectedProject.set(null);
+    if (this.panZoomInstance) {
+      this.panZoomInstance.destroy();
+      this.panZoomInstance = null;
+    }
   }
 
   async renderMermaid() {
     if (typeof mermaid === 'undefined' || !this.mermaidContainer) {
       console.error('Mermaid não carregado');
       return;
+    }
+
+    if (this.panZoomInstance) {
+      this.panZoomInstance.destroy();
+      this.panZoomInstance = null;
     }
 
     try {
@@ -163,8 +181,29 @@ export class AppComponent implements OnInit {
 
       const svgElement = container.querySelector('svg');
       if (svgElement) {
-        svgElement.style.maxWidth = '100%';
-        svgElement.style.height = 'auto';
+        svgElement.removeAttribute('width');
+        svgElement.removeAttribute('height');
+        svgElement.removeAttribute('style');
+
+        svgElement.style.width = '100%';
+        svgElement.style.height = '100%';
+        svgElement.style.display = 'block';
+
+        if (typeof svgPanZoom !== 'undefined') {
+          this.panZoomInstance = svgPanZoom(svgElement, {
+            zoomEnabled: true,
+            controlIconsEnabled: true,
+            fit: true,
+            center: true,
+            minZoom: 0.1,
+            maxZoom: 20,
+            zoomScaleSensitivity: 0.5
+          });
+
+          this.panZoomInstance.resize();
+          this.panZoomInstance.fit();
+          this.panZoomInstance.center();
+        }
       }
 
     } catch (e: any) {
