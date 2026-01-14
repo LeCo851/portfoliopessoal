@@ -310,3 +310,30 @@
 .chat-content::-webkit-scrollbar-thumb:hover {
   background: #666;
 }
+
+/* ==========================================================================
+   9. MOBILE RESPONSIVENESS
+   ========================================================================== */
+@media (max-width: 768px) {
+  .chat-card {
+    width: 90vw !important; /* Ocupa 90% da largura da tela */
+    right: 5vw !important; /* Centraliza horizontalmente (5% de cada lado) */
+    bottom: 90px !important; /* Espaço para o botão FAB */
+    height: 60vh !important; /* Altura fixa razoável */
+    max-height: 600px;
+  }
+
+  /* Quando expandido no mobile, ocupa quase tela cheia mas respeita margens */
+  .chat-card.expanded {
+    width: 95vw !important;
+    height: 85vh !important;
+    right: 2.5vw !important;
+    bottom: 20px !important;
+    top: 20px !important; /* Força topo para evitar corte */
+  }
+
+  .chat-fab-button {
+    bottom: 20px;
+    right: 20px;
+  }
+}

@@ -1,0 +1,29 @@
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  docker:
+    compose:
+      enabled: false
+
+  base-url: http://localhost:8080
+
+  datasource:
+
+    url: jdbc:postgresql://aws-1-sa-east-1.pooler.supabase.com:6543/postgres?sslmode=require&prepareThreshold=0
+    username: postgres.vorzuewlvjsveyeoorvu
+
+    password: ${DB_PASSWORD}
+
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dbcp:
+          ps:
+            maxActive: 0
+            maxIdle: 0
+            maxWait: -1

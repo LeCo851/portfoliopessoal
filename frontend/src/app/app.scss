@@ -523,4 +523,27 @@ $font-digital: 'Courier New', monospace;     // Dados/Display
 
 @media (max-width: 768px) {
   .dashboard-header { flex-direction: column; align-items: flex-start; gap: 1rem; .status-badge { align-self: flex-start; } }
+
+  // Ajuste para os cards não vazarem da tela no mobile
+  .container {
+    padding: 1rem; // Reduz padding lateral
+    width: 100%;
+    overflow-x: hidden; // Evita scroll horizontal indesejado
+  }
+
+  .grid {
+    grid-template-columns: 1fr; // Uma coluna apenas
+    gap: 1.5rem;
+  }
+
+  .card {
+    width: 100%; // Garante que o card não ultrapasse a largura do container
+    max-width: 100%;
+
+    // Ajuste do efeito hover para não quebrar layout mobile
+    &:hover {
+      transform: translateY(-2px); // Movimento mais sutil
+      &::before { display: none; } // Remove efeito de brilho que pode causar overflow
+    }
+  }
 }
