@@ -15,7 +15,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/projects")
-@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @Tag(name = "Recupera repositórios do Github ", description = "Endpoint para comunicação com o Github")
 public class PortfolioController {

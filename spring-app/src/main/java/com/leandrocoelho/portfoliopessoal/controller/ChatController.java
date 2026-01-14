@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/chat")
-@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @Tag(name = "Chatbot com IA generativa", description = "Endpoint para comunicação com Chatbot")
 public class ChatController {

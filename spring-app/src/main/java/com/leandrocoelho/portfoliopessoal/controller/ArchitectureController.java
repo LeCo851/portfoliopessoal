@@ -12,7 +12,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/architecture")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 @Tag(name = "Cria diagramas em mermaid.js" ,description = "Diagramas criados com IA generativa")
 public class ArchitectureController {
 
