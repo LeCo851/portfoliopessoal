@@ -12,7 +12,9 @@ public class CorsConfig implements WebMvcConfigurer {
                 .allowedOrigins(
                         "http://localhost:4200",
                         "http://localhost:8081",// Para seus testes locais
-                        "https://portfoliopessoal-frontend-395115142542.us-central1.run.app" // <--- ADICIONE A URL DO SEU FRONTEND AQUI (sem a barra / no final)
+                        "https://portfoliopessoal-frontend-395115142542.us-central1.run.app",
+                        "https://devleco.com.br",
+                        "https://www.devleco.com.br"
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
